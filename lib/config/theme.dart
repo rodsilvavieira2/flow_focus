@@ -6,7 +6,7 @@ class FocusFlowDarkTheme {
   static const _surface = Color(0xFF1C223C); // cards / skip-btn
   static const _primary = Color(0xFF5E78F7); // barra de progresso, botão Start
   static const _track = Color(0xFF2E3868); // trilho da progress-bar
-  static const _subtleText = Color(0xFFB0B6D1); // legendas / texto secundário
+  static const _subtleText = Colors.white; // legendas / texto secundário
   static const _onPrimary = Colors.white;
 
   static ThemeData get theme {
@@ -28,7 +28,7 @@ class FocusFlowDarkTheme {
       ),
 
       textTheme: GoogleFonts.interTextTheme(base.textTheme).copyWith(
-        bodyMedium: const TextStyle(color: Colors.white),
+        bodyMedium: const TextStyle(color: _subtleText),
         labelLarge: const TextStyle(fontWeight: FontWeight.w600),
         displayMedium: const TextStyle(
           fontWeight: FontWeight.w600,
