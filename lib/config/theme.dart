@@ -1,55 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-const _primary = Color(0xFF5E78F7); // Azul de ação
-const _bgLight = Color(0xFFF8F9FC); // Cinza-clarinho
-const _bgDark = Color(0xFF101323); // Quase-preto
-const _secondary = Color(0xFFE6E9F3); // Superfície clara
-const _labelLight = Color(0xFF0F111E); // Texto sobre claro
-const _labelDark = Colors.white; // Texto sobre escuro
-
-class FocusFlowCupertinoTheme {
-  static CupertinoThemeData get light => CupertinoThemeData(
-    brightness: Brightness.light,
-    primaryColor: _primary,
-    barBackgroundColor: _secondary,
-    scaffoldBackgroundColor: _bgLight,
-    textTheme: const CupertinoTextThemeData(
-      navLargeTitleTextStyle: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
-        color: _labelLight,
-      ),
-      actionTextStyle: TextStyle(
-        fontSize: 17,
-        fontWeight: FontWeight.w600,
-        color: _primary,
-      ),
-    ),
-  );
-
-  static CupertinoThemeData get dark => CupertinoThemeData(
-    brightness: Brightness.dark,
-    primaryColor: _primary,
-    barBackgroundColor: _secondary.withValues(
-      alpha: 0xFF, // Transparência para o AppBar
-    ),
-    scaffoldBackgroundColor: _bgDark,
-    textTheme: const CupertinoTextThemeData(
-      navLargeTitleTextStyle: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
-        color: _labelDark,
-      ),
-      actionTextStyle: TextStyle(
-        fontSize: 17,
-        fontWeight: FontWeight.w600,
-        color: _primary,
-      ),
-    ),
-  );
-}
 
 class FocusFlowDarkTheme {
   static const _background = Color(0xFF101323); // navy quase-preto

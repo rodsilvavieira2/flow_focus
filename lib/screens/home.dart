@@ -1,32 +1,28 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        padding: const EdgeInsetsDirectional.only(start: 16, end: 16, top: 12),
-        leading: Text(
-          "FlowFocus",
-          style: CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle,
-        ),
-        backgroundColor: CupertinoTheme.of(context).barBackgroundColor,
-      ),
-      child: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Welcome to FlowFocus!",
-                style: CupertinoTheme.of(
-                  context,
-                ).textTheme.navLargeTitleTextStyle,
-              ),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Focus Flow'), centerTitle: true),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Bem-vindo ao Focus Flow!',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Ação do botão
+              },
+              child: const Text('Começar'),
+            ),
+          ],
         ),
       ),
     );
