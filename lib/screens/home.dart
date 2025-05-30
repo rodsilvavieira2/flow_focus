@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [ProgressBar()],
+          children: [ProgressBar(percent: 0.05)],
         ),
       ),
     );

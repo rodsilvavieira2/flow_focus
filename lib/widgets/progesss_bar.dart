@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ProgressBar extends StatelessWidget {
+  final double percent;
+
+  const ProgressBar({super.key, required this.percent});
+
   @override
   Widget build(BuildContext context) {
     var padding = MediaQuery.of(context).size.width * 0.20;
@@ -12,12 +16,12 @@ class ProgressBar extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [Text("Tempo restando"), Text("0%")],
+            children: [Text("Tempo restando"), Text(_getPercentText())],
           ),
           SizedBox(height: 16),
           TweenAnimationBuilder<double>(
             duration: Duration(microseconds: 300),
-            tween: Tween<double>(begin: 0, end: 0.1),
+            tween: Tween<double>(begin: 0, end: percent),
             builder: (context, value, child) {
               return LinearProgressIndicator(
                 value: value,
@@ -33,5 +37,12 @@ class ProgressBar extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  _getPercentText() {
+    if (percent == 0) return "0%";
+    var percentText = (percent * 100).toStringAsFixed(0);
+
+    return "$percentText%";
   }
 }
