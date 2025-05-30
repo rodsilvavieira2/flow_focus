@@ -1,4 +1,5 @@
 import 'package:flow_focus/widgets/progesss_bar.dart';
+import 'package:flow_focus/widgets/timer.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -11,7 +12,11 @@ class HomeScreen extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [ProgressBar(percent: 0.05)],
+          children: [
+            Timer(duration: Duration(hours: 0, minutes: 25, seconds: 0)),
+            const SizedBox(height: 22),
+            ProgressBar(percent: 0.05),
+          ],
         ),
       ),
     );
