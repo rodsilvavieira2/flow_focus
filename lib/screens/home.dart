@@ -1,3 +1,4 @@
+import 'package:flow_focus/widgets/progesss_bar.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -6,23 +7,11 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Focus Flow'), centerTitle: true),
+      appBar: AppBar(title: const Text('FocusFlow'), centerTitle: false),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Bem-vindo ao Focus Flow!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Ação do botão
-              },
-              child: const Text('Começar'),
-            ),
-          ],
+          children: [ProgressBar()],
         ),
       ),
     );

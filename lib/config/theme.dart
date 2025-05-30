@@ -28,7 +28,7 @@ class FocusFlowDarkTheme {
       ),
 
       textTheme: GoogleFonts.interTextTheme(base.textTheme).copyWith(
-        bodyMedium: const TextStyle(color: _subtleText),
+        bodyMedium: const TextStyle(color: Colors.white),
         labelLarge: const TextStyle(fontWeight: FontWeight.w600),
         displayMedium: const TextStyle(
           fontWeight: FontWeight.w600,
