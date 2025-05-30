@@ -1,4 +1,5 @@
 import 'package:flow_focus/config/theme.dart';
+import 'package:flow_focus/screens/home.dart';
 import 'package:flutter/cupertino.dart';
 
 void main() {
@@ -12,13 +13,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoApp(
       debugShowCheckedModeBanner: false,
-      theme: FocusFlowCupertinoTheme.light,
-      home: Center(
-        child: Text(
-          'Hello, World!',
-          style: CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle,
-        ),
-      ),
+      theme: FocusFlowCupertinoTheme.dark,
+      home: const HomeScreen(),
     );
   }
 }
