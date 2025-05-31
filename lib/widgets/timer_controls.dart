@@ -12,7 +12,7 @@ class TimeControls extends StatelessWidget {
     required this.onStart,
   });
 
-  final double _icon_size = 32;
+  final double _iconSize = 32;
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +22,15 @@ class TimeControls extends StatelessWidget {
         IconButton.filled(
           onPressed: onStart,
           icon: Icon(Icons.play_arrow),
-          iconSize: _icon_size,
+          iconSize: _iconSize,
         ),
+
         const SizedBox(width: 12),
 
         IconButton.filled(
           onPressed: onStart,
           icon: Icon(Icons.pause),
-          iconSize: _icon_size,
+          iconSize: _iconSize,
         ),
 
         const SizedBox(width: 12),
@@ -37,7 +38,7 @@ class TimeControls extends StatelessWidget {
         IconButton.filled(
           onPressed: onStart,
           icon: Icon(Icons.restart_alt),
-          iconSize: _icon_size,
+          iconSize: _iconSize,
         ),
       ],
     );
