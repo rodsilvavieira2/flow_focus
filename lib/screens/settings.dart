@@ -23,19 +23,43 @@ class SettingsForm extends StatefulWidget {
 
 class _SettingsFormState extends State<SettingsForm> {
   int _workTime = 2;
+  int _shortBreakTime = 2;
+  int _longBreakTime = 2;
+  int _sessionUntilLongBreak = 2;
+
   late TextEditingController _workTimeValueController;
+  late TextEditingController _shortBreakTimeController;
+  late TextEditingController _longBreakTimeController;
+  late TextEditingController _sessionUntilLongBreakController;
 
   @override
   void initState() {
     super.initState();
+
     _workTimeValueController = TextEditingController(
       text: _workTime.toString(),
+    );
+
+    _sessionUntilLongBreakController = TextEditingController(
+      text: _sessionUntilLongBreak.toString(),
+    );
+
+    _longBreakTimeController = TextEditingController(
+      text: _longBreakTime.toString(),
+    );
+
+    _shortBreakTimeController = TextEditingController(
+      text: _shortBreakTime.toString(),
     );
   }
 
   @override
   void dispose() {
     _workTimeValueController.dispose();
+    _sessionUntilLongBreakController.dispose();
+    _longBreakTimeController.dispose();
+    _shortBreakTimeController.dispose();
+
     super.dispose();
   }
 

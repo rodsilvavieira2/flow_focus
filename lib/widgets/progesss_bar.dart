@@ -18,7 +18,7 @@ class ProgressBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [Text("Tempo restando"), Text(_getPercentText())],
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 8),
           TweenAnimationBuilder<double>(
             duration: Duration(microseconds: 300),
             tween: Tween<double>(begin: 0, end: percent),
