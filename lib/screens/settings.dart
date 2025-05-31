@@ -7,7 +7,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('FocusFlow')),
-      body: Center(child: SettingsForm()),
+      body: SettingsForm(),
     );
   }
 }
@@ -22,10 +22,10 @@ class SettingsForm extends StatefulWidget {
 }
 
 class _SettingsFormState extends State<SettingsForm> {
-  int _workTime = 2;
-  int _shortBreakTime = 2;
-  int _longBreakTime = 2;
-  int _sessionUntilLongBreak = 2;
+  int _workTime = 25;
+  int _shortBreakTime = 5;
+  int _longBreakTime = 15;
+  int _sessionUntilLongBreak = 4;
 
   late TextEditingController _workTimeValueController;
   late TextEditingController _shortBreakTimeController;
@@ -65,53 +65,56 @@ class _SettingsFormState extends State<SettingsForm> {
 
   @override
   Widget build(BuildContext context) {
-    var padding = MediaQuery.of(context).size.width * 0.20;
+    // var padding = MediaQuery.of(context).size.width * 0.20;
 
-    return Padding(
-      padding: EdgeInsets.all(padding),
-      child: Column(
-        children: [
-          _buildNumberInput(
-            label: "Tempo de trabalho (minutos)",
-            controller: _workTimeValueController,
-            onChanged: (value) {
-              setState(() {
-                _workTime = value;
-              });
-            },
-          ),
+    return Column(
+      children: [
+        _buildNumberInput(
+          label: "Tempo de trabalho (minutos)",
+          controller: _workTimeValueController,
+          onChanged: (value) {
+            setState(() {
+              _workTime = value;
+            });
+          },
+        ),
 
-          _buildNumberInput(
-            label: "Tempo de intervalo (minutos)",
-            controller: _shortBreakTimeController,
-            onChanged: (value) {
-              setState(() {
-                _workTime = value;
-              });
-            },
-          ),
+        const SizedBox(height: 12),
 
-          _buildNumberInput(
-            label: "Tempo de longo de intervalo (minutos)",
-            controller: _longBreakTimeController,
-            onChanged: (value) {
-              setState(() {
-                _workTime = value;
-              });
-            },
-          ),
+        _buildNumberInput(
+          label: "Tempo de intervalo (minutos)",
+          controller: _shortBreakTimeController,
+          onChanged: (value) {
+            setState(() {
+              _shortBreakTime = value;
+            });
+          },
+        ),
 
-          _buildNumberInput(
-            label: "Secessões ate  o intervalo longo",
-            controller: _longBreakTimeController,
-            onChanged: (value) {
-              setState(() {
-                _workTime = value;
-              });
-            },
-          ),
-        ],
-      ),
+        const SizedBox(height: 12),
+
+        _buildNumberInput(
+          label: "Tempo de longo de intervalo (minutos)",
+          controller: _longBreakTimeController,
+          onChanged: (value) {
+            setState(() {
+              _longBreakTime = value;
+            });
+          },
+        ),
+
+        const SizedBox(height: 12),
+
+        _buildNumberInput(
+          label: "Secessões ate  o intervalo longo",
+          controller: _sessionUntilLongBreakController,
+          onChanged: (value) {
+            setState(() {
+              _sessionUntilLongBreak = value;
+            });
+          },
+        ),
+      ],
     );
   }
 
@@ -124,7 +127,7 @@ class _SettingsFormState extends State<SettingsForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label),
-        const SizedBox(height: 12),
+        const SizedBox(height: 8),
         TextField(
           controller: controller,
           onChanged: (value) {
