@@ -4,12 +4,16 @@ class TimeControls extends StatelessWidget {
   final VoidCallback onStart;
   final VoidCallback onPause;
   final VoidCallback onRestart;
+  final VoidCallback onSkip;
+  final bool isStated;
 
   const TimeControls({
     super.key,
     required this.onPause,
     required this.onRestart,
     required this.onStart,
+    required this.isStated,
+    required this.onSkip,
   });
 
   final double _iconSize = 32;
@@ -30,6 +34,14 @@ class TimeControls extends StatelessWidget {
         IconButton.filled(
           onPressed: onStart,
           icon: Icon(Icons.pause),
+          iconSize: _iconSize,
+        ),
+
+        const SizedBox(width: 12),
+
+        IconButton.filled(
+          onPressed: isStated ? null : onSkip,
+          icon: Icon(Icons.skip_next),
           iconSize: _iconSize,
         ),
 
