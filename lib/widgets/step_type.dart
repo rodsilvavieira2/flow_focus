@@ -1,22 +1,49 @@
 import 'package:flutter/material.dart';
 
-enum Step { work, interval, lagerInterval }
+enum PomoStepType { work, interval, lagerInterval }
 
 class StepType extends StatelessWidget {
-  final Step step;
+  final PomoStepType step;
 
   const StepType({super.key, required this.step});
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [_getStepText(step)]);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+          child: Row(
+            children: [
+              _getStepIcon(step),
+              SizedBox(width: 8),
+              _getStepText(step),
+              SizedBox(width: 8),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
-  _getStepText(Step input) {
+  _getStepText(PomoStepType input) {
     return switch (input) {
-      Step.work => Text("Foco!"),
-      Step.interval => Text("Um pouco de descanso"),
-      Step.lagerInterval => Text("Pegue um cafe e relaxe"),
+      PomoStepType.work => Text("Foco!"),
+      PomoStepType.interval => Text("Um pouco de descanso"),
+      PomoStepType.lagerInterval => Text("Pegue um cafe e relaxe"),
+    };
+  }
+
+  _getStepIcon(PomoStepType input) {
+    return switch (input) {
+      PomoStepType.work => Icon(Icons.work_outline),
+      PomoStepType.interval => Icon(Icons.timer),
+      PomoStepType.lagerInterval => Icon(Icons.hourglass_bottom),
     };
   }
 }
