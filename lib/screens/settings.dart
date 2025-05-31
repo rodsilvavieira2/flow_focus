@@ -1,0 +1,87 @@
+import 'package:flutter/material.dart';
+
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('FocusFlow')),
+      body: Center(child: SettingsForm()),
+    );
+  }
+}
+
+class SettingsForm extends StatefulWidget {
+  const SettingsForm({super.key});
+
+  @override
+  State<SettingsForm> createState() {
+    return _SettingsFormState();
+  }
+}
+
+class _SettingsFormState extends State<SettingsForm> {
+  int _workTime = 2;
+  late TextEditingController _workTimeValueController;
+
+  @override
+  void initState() {
+    super.initState();
+    _workTimeValueController = TextEditingController(
+      text: _workTime.toString(),
+    );
+  }
+
+  @override
+  void dispose() {
+    _workTimeValueController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var padding = MediaQuery.of(context).size.width * 0.20;
+
+    return Padding(
+      padding: EdgeInsets.all(padding),
+      child: Column(
+        children: [
+          _buildNumberInput(
+            label: "Tempo de trabalho (minutos)",
+            controller: _workTimeValueController,
+            onChanged: (value) {
+              setState(() {
+                _workTime = value;
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  _buildNumberInput({
+    required String label,
+    required TextEditingController controller,
+    required ValueChanged<int> onChanged,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label),
+        const SizedBox(height: 12),
+        TextField(
+          controller: controller,
+          onChanged: (value) {
+            final newValue = int.tryParse(value);
+
+            if (newValue != null) {
+              onChanged(newValue);
+            }
+          },
+        ),
+      ],
+    );
+  }
+}

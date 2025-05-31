@@ -1,4 +1,4 @@
-import 'package:flow_focus/screens/settins.dart';
+import 'package:flow_focus/screens/settings.dart';
 import 'package:flow_focus/widgets/progesss_bar.dart';
 import 'package:flow_focus/widgets/step_type.dart';
 import 'package:flow_focus/widgets/timer.dart';
