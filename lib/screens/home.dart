@@ -10,7 +10,19 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('FocusFlow'), centerTitle: false),
+      appBar: AppBar(
+        title: const Text('FocusFlow'),
+        centerTitle: false,
+        actions: [
+          IconButton(
+            onPressed: () {
+              print("got to settins");
+            },
+            icon: Icon(Icons.settings),
+          ),
+          SizedBox(width: 12),
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
