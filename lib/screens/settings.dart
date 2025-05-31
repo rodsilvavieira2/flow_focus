@@ -80,6 +80,36 @@ class _SettingsFormState extends State<SettingsForm> {
               });
             },
           ),
+
+          _buildNumberInput(
+            label: "Tempo de intervalo (minutos)",
+            controller: _shortBreakTimeController,
+            onChanged: (value) {
+              setState(() {
+                _workTime = value;
+              });
+            },
+          ),
+
+          _buildNumberInput(
+            label: "Tempo de longo de intervalo (minutos)",
+            controller: _longBreakTimeController,
+            onChanged: (value) {
+              setState(() {
+                _workTime = value;
+              });
+            },
+          ),
+
+          _buildNumberInput(
+            label: "Secessões ate  o intervalo longo",
+            controller: _longBreakTimeController,
+            onChanged: (value) {
+              setState(() {
+                _workTime = value;
+              });
+            },
+          ),
         ],
       ),
     );
