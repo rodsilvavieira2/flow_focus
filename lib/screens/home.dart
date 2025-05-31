@@ -1,3 +1,4 @@
+import 'package:flow_focus/screens/settins.dart';
 import 'package:flow_focus/widgets/progesss_bar.dart';
 import 'package:flow_focus/widgets/step_type.dart';
 import 'package:flow_focus/widgets/timer.dart';
@@ -16,7 +17,10 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              print("got to settins");
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingsScreen()),
+              );
             },
             icon: Icon(Icons.settings),
           ),
