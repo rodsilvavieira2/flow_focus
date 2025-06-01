@@ -23,25 +23,19 @@ class TimeControls extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Visibility(
-          visible: !isRunning,
-          child: IconButton.filled(
-            onPressed: onStart,
-            icon: Icon(Icons.play_arrow),
-            iconSize: _iconSize,
-          ),
-        ),
-
-        if (isRunning) const SizedBox(width: 12),
-
-        Visibility(
-          visible: isRunning,
-          child: IconButton.filled(
-            onPressed: onPause,
-            icon: Icon(Icons.pause),
-            iconSize: _iconSize,
-          ),
-        ),
+        isRunning
+            ? IconButton.filled(
+                onPressed: onPause,
+                icon: Icon(Icons.pause),
+                iconSize: _iconSize,
+                tooltip: 'Pausar',
+              )
+            : IconButton.filled(
+                onPressed: onStart,
+                icon: Icon(Icons.play_arrow),
+                iconSize: _iconSize,
+                tooltip: 'Iniciar',
+              ),
 
         const SizedBox(width: 12),
 
@@ -49,6 +43,7 @@ class TimeControls extends StatelessWidget {
           onPressed: isRunning ? null : onSkip,
           icon: Icon(Icons.skip_next),
           iconSize: _iconSize,
+          tooltip: isRunning ? 'Aguarde o término ou pause' : 'Pular etapa',
         ),
 
         const SizedBox(width: 12),
@@ -57,6 +52,7 @@ class TimeControls extends StatelessWidget {
           onPressed: onRestart,
           icon: Icon(Icons.restart_alt),
           iconSize: _iconSize,
+          tooltip: 'Reiniciar',
         ),
       ],
     );
