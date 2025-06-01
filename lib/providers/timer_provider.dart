@@ -79,16 +79,17 @@ class TimerModelProvider extends ChangeNotifier {
     if (_currentStep == PomoStepType.work) {
       _completedSessions++;
 
-      _currentStep = _completedSessions % 4 == 0
+      _currentStep =
+          _completedSessions % _configModelProvider.sessionUntilLongBreak == 0
           ? PomoStepType.longBreak
           : PomoStepType.shortBreak;
 
       _totalDuration = _currentStep == PomoStepType.longBreak
-          ? const Duration(minutes: 15)
-          : const Duration(minutes: 5);
+          ? Duration(minutes: _configModelProvider.longBreakTime)
+          : Duration(minutes: _configModelProvider.shortBreakTime);
     } else {
       _currentStep = PomoStepType.work;
-      _totalDuration = const Duration(minutes: 25);
+      _totalDuration = Duration(minutes: _configModelProvider.workTime);
     }
 
     _currentDuration = _totalDuration;
@@ -99,13 +100,25 @@ class TimerModelProvider extends ChangeNotifier {
   void restartTimer() {
     _timer?.cancel();
     _isRunning = false;
+
+    switch (_currentStep) {
+      case PomoStepType.work:
+        _totalDuration = Duration(minutes: _configModelProvider.workTime);
+      case PomoStepType.shortBreak:
+        _totalDuration = Duration(minutes: _configModelProvider.shortBreakTime);
+      case PomoStepType.longBreak:
+        _totalDuration = Duration(minutes: _configModelProvider.longBreakTime);
+    }
+
     _currentDuration = _totalDuration;
+
     notifyListeners();
   }
 
   @override
   void dispose() {
     _timer?.cancel();
+    _configModelProvider.removeListener(_onConfigChanged);
     super.dispose();
   }
 }
