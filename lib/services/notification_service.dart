@@ -52,28 +52,64 @@ class NotificationService implements INotificationService {
 
   @override
   Future<void> showBreakNotification({VoidCallback? onAction}) async {
+    var actions = <PomoNotificationAction>[];
+
+    if (onAction != null) {
+      actions.add(
+        PomoNotificationAction(
+          label: 'View Progress',
+          type: "start_action",
+          onAction: onAction,
+        ),
+      );
+    }
+
     await showTimerNotification(
       title: 'Break Time! 🎉',
       body: 'Time for a well-deserved break. Step away from your work.',
-      actions: [],
+      actions: actions,
     );
   }
 
   @override
   Future<void> showFocusNotification({VoidCallback? onAction}) async {
+    var actions = <PomoNotificationAction>[];
+
+    if (onAction != null) {
+      actions.add(
+        PomoNotificationAction(
+          label: 'View Progress',
+          type: "start_action",
+          onAction: onAction,
+        ),
+      );
+    }
+
     await showTimerNotification(
       title: 'Focus Time! 🎯',
       body: 'Break is over. Time to get back to focused work.',
-      actions: [],
+      actions: actions,
     );
   }
 
   @override
   Future<void> showSessionCompleteNotification({VoidCallback? onAction}) async {
+    var actions = <PomoNotificationAction>[];
+
+    if (onAction != null) {
+      actions.add(
+        PomoNotificationAction(
+          label: 'View Progress',
+          type: "start_action",
+          onAction: onAction,
+        ),
+      );
+    }
+
     await showTimerNotification(
       title: 'Session Complete! ✨',
       body: 'Great job! You\'ve completed your focus session.',
-      actions: [],
+      actions: actions,
     );
   }
 
@@ -82,15 +118,24 @@ class NotificationService implements INotificationService {
     required int completedPomodoros,
     VoidCallback? onAction,
   }) async {
+    var actions = <PomoNotificationAction>[];
+
+    if (onAction != null) {
+      actions.add(
+        PomoNotificationAction(
+          label: 'View Progress',
+          type: "start_action",
+          onAction: onAction,
+        ),
+      );
+    }
+
     await showTimerNotification(
       title: 'Pomodoro Complete! 🍅',
       body:
           'You\'ve completed $completedPomodoros pomodoro${completedPomodoros > 1 ? 's' : ''}.',
-      actions: [],
+      actions: actions,
     );
-    if (onAction != null) {
-      onAction();
-    }
   }
 
   @override
