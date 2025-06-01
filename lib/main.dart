@@ -2,6 +2,7 @@ import 'package:flow_focus/config/theme.dart';
 import 'package:flow_focus/providers/config_provider.dart';
 import 'package:flow_focus/providers/timer_provider.dart';
 import 'package:flow_focus/screens/home.dart';
+import 'package:flow_focus/services/notification_service.dart';
 import 'package:flow_focus/services/settings_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,13 +10,14 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  final notificationService = NotificationService();
+  final settingsService = SettingsService();
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (_) {
-            final settingsService = SettingsService();
-
             return ConfigModelProvider(settingsService: settingsService);
           },
         ),
@@ -24,10 +26,12 @@ void main() async {
           create: (context) {
             return TimerModelProvider(
               Provider.of<ConfigModelProvider>(context, listen: false),
+              notificationService,
             );
           },
           update: (context, config, previousTimer) {
-            return previousTimer ?? TimerModelProvider(config);
+            return previousTimer ??
+                TimerModelProvider(config, notificationService);
           },
         ),
       ],

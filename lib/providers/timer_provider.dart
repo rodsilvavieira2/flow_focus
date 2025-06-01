@@ -1,14 +1,16 @@
 import 'dart:async';
 
+import 'package:flow_focus/interface/config_provider.dart';
+import 'package:flow_focus/interface/notification_service.dart';
 import 'package:flow_focus/interface/timer_provider.dart';
-import 'package:flow_focus/providers/config_provider.dart';
 import 'package:flow_focus/widgets/step_type.dart';
 import 'package:flutter/material.dart';
 
 class TimerModelProvider extends ChangeNotifier implements ITimerProvider {
-  final ConfigModelProvider _configModelProvider;
+  final IConfigProvider _configModelProvider;
+  final INotificationService _notificationService;
 
-  TimerModelProvider(this._configModelProvider) {
+  TimerModelProvider(this._configModelProvider, this._notificationService) {
     _configModelProvider.addListener(_onConfigChanged);
     _initializeFormConfig();
   }
@@ -100,9 +102,16 @@ class TimerModelProvider extends ChangeNotifier implements ITimerProvider {
       _totalDuration = _currentStep == PomoStepType.longBreak
           ? Duration(minutes: _configModelProvider.longBreakTime)
           : Duration(minutes: _configModelProvider.shortBreakTime);
+
+      _notificationService.showBreakNotification();
+
+      // Show pomodoro complete notification
+      _notificationService.showPomodoroCompleteNotification(_completedSessions);
     } else {
       _currentStep = PomoStepType.work;
       _totalDuration = Duration(minutes: _configModelProvider.workTime);
+
+      _notificationService.showFocusNotification();
     }
 
     _currentDuration = _totalDuration;
