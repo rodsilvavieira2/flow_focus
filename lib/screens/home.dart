@@ -47,7 +47,7 @@ class HomeScreen extends StatelessWidget {
                   isRunning: provider.isRunning,
                 ),
                 const SizedBox(height: 22),
-                ProgressBar(percent: 0.05),
+                ProgressBar(percent: provider.progress),
               ],
             ),
           );
