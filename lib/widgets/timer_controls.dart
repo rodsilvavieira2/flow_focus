@@ -32,7 +32,7 @@ class TimeControls extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(width: 12),
+        if (isRunning) const SizedBox(width: 12),
 
         Visibility(
           visible: isRunning,
