@@ -3,14 +3,12 @@ import 'dart:async';
 import 'package:flow_focus/widgets/step_type.dart';
 import 'package:flutter/material.dart';
 
-enum StepTypes { work, shortBreak, longBreak }
-
 class TimerModelProvider extends ChangeNotifier {
   Timer? _timer;
   Duration _currentDuration = const Duration(minutes: 25);
   Duration _totalDuration = const Duration(minutes: 25);
   bool _isRunning = false;
-  StepTypes _currentStep = StepTypes.work;
+  PomoStepType _currentStep = PomoStepType.work;
   int _completedSessions = 0;
 
   Duration get currentDuration => _currentDuration;
@@ -48,18 +46,18 @@ class TimerModelProvider extends ChangeNotifier {
     _timer?.cancel();
     _isRunning = false;
 
-    if (_currentStep == StepTypes.work) {
+    if (_currentStep == PomoStepType.work) {
       _completedSessions++;
 
       _currentStep = _completedSessions % 4 == 0
-          ? StepTypes.longBreak
-          : StepTypes.shortBreak;
+          ? PomoStepType.longBreak
+          : PomoStepType.shortBreak;
 
-      _totalDuration = _currentStep == StepTypes.longBreak
+      _totalDuration = _currentStep == PomoStepType.longBreak
           ? const Duration(minutes: 15)
           : const Duration(minutes: 5);
     } else {
-      _currentStep = StepTypes.work;
+      _currentStep = PomoStepType.work;
       _totalDuration = const Duration(minutes: 25);
     }
 

@@ -35,7 +35,7 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                StepType(step: PomoStepType.work),
+                StepType(step: provider.currentStep),
                 const SizedBox(height: 22),
                 Timer(duration: provider.currentDuration),
                 const SizedBox(height: 22),

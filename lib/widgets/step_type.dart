@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum PomoStepType { work, interval, lagerInterval }
+enum PomoStepType { work, shortBreak, longBreak }
 
 class StepType extends StatelessWidget {
   final PomoStepType step;
@@ -34,16 +34,16 @@ class StepType extends StatelessWidget {
   _getStepText(PomoStepType input) {
     return switch (input) {
       PomoStepType.work => Text("Foco!"),
-      PomoStepType.interval => Text("Um pouco de descanso"),
-      PomoStepType.lagerInterval => Text("Pegue um cafe e relaxe"),
+      PomoStepType.shortBreak => Text("Um pouco de descanso"),
+      PomoStepType.longBreak => Text("Pegue um cafe e relaxe"),
     };
   }
 
   _getStepIcon(PomoStepType input) {
     return switch (input) {
       PomoStepType.work => Icon(Icons.work_outline),
-      PomoStepType.interval => Icon(Icons.timer),
-      PomoStepType.lagerInterval => Icon(Icons.hourglass_bottom),
+      PomoStepType.shortBreak => Icon(Icons.timer),
+      PomoStepType.longBreak => Icon(Icons.hourglass_bottom),
     };
   }
 }
