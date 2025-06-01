@@ -11,6 +11,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final notificationService = NotificationService();
+  await notificationService.initialize();
   final settingsService = SettingsService();
 
   runApp(
