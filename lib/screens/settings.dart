@@ -25,11 +25,6 @@ class SettingsForm extends StatefulWidget {
 }
 
 class _SettingsFormState extends State<SettingsForm> {
-  int _workTime = 25;
-  int _shortBreakTime = 5;
-  int _longBreakTime = 15;
-  int _sessionUntilLongBreak = 4;
-
   late TextEditingController _workTimeController;
   late TextEditingController _shortBreakTimeController;
   late TextEditingController _longBreakTimeController;
