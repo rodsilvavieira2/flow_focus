@@ -4,8 +4,10 @@ import 'package:flow_focus/providers/timer_provider.dart';
 import 'package:flow_focus/screens/home.dart';
 import 'package:flow_focus/services/notification_service.dart';
 import 'package:flow_focus/services/settings_service.dart';
+import 'package:flow_focus/services/system_tray.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:window_manager/window_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,6 +15,22 @@ void main() async {
   final notificationService = NotificationService();
   await notificationService.initialize();
   final settingsService = SettingsService();
+
+  await windowManager.ensureInitialized();
+
+  WindowOptions windowOptions = WindowOptions(
+    size: const Size(800, 600),
+    center: true,
+    backgroundColor: Colors.transparent,
+    skipTaskbar: false,
+    titleBarStyle: TitleBarStyle.hidden,
+    title: 'FlowFocus',
+  );
+
+  await windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+  });
 
   runApp(
     MultiProvider(
@@ -41,8 +59,38 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WindowListener {
+  final SystemTrayService _systemTrayService = SystemTrayService();
+
+  @override
+  void initState() {
+    super.initState();
+    windowManager.addListener(this);
+    _initSystemTray();
+  }
+
+  @override
+  void dispose() {
+    windowManager.removeListener(this);
+    _systemTrayService.destroy();
+    super.dispose();
+  }
+
+  Future<void> _initSystemTray() async {
+    await _systemTrayService.initSystemTray();
+  }
+
+  @override
+  void onWindowClose() async {
+    await _systemTrayService.hideToTray();
+  }
 
   @override
   Widget build(BuildContext context) {
