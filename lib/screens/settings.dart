@@ -1,6 +1,7 @@
-import 'package:flow_focus/services/settings_service.dart';
+import 'package:flow_focus/providers/config_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -44,49 +45,27 @@ class _SettingsFormState extends State<SettingsForm> {
   @override
   void initState() {
     super.initState();
-    _workTimeController = TextEditingController(text: _workTime.toString());
+    _workTimeController = TextEditingController();
 
-    _shortBreakTimeController = TextEditingController(
-      text: _shortBreakTime.toString(),
-    );
+    _shortBreakTimeController = TextEditingController();
 
-    _longBreakTimeController = TextEditingController(
-      text: _longBreakTime.toString(),
-    );
+    _longBreakTimeController = TextEditingController();
 
-    _sessionUntilLongBreakController = TextEditingController(
-      text: _sessionUntilLongBreak.toString(),
-    );
+    _sessionUntilLongBreakController = TextEditingController();
 
-    _loadSettings().then((_) {
-      _workTimeController = TextEditingController(text: _workTime.toString());
-
-      _shortBreakTimeController = TextEditingController(
-        text: _shortBreakTime.toString(),
-      );
-
-      _longBreakTimeController = TextEditingController(
-        text: _longBreakTime.toString(),
-      );
-
-      _sessionUntilLongBreakController = TextEditingController(
-        text: _sessionUntilLongBreak.toString(),
-      );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateFormsFromProvider();
     });
   }
 
-  Future<void> _loadSettings() async {
-    _workTime = await SettingsService.getWorkTime();
-    _shortBreakTime = await SettingsService.getShortBreakTime();
-    _longBreakTime = await SettingsService.getLongBreakTime();
-    _sessionUntilLongBreak = await SettingsService.getSessionUntilLongBreak();
+  void _updateFormsFromProvider() {
+    final config = Provider.of<ConfigModelProvider>(context, listen: false);
 
-    setState(() {
-      _workTime = _workTime;
-      _shortBreakTime = _shortBreakTime;
-      _longBreakTime = _longBreakTime;
-      _sessionUntilLongBreak = _sessionUntilLongBreak;
-    });
+    _workTimeController.text = config.workTime.toString();
+    _shortBreakTimeController.text = config.shortBreakTime.toString();
+    _longBreakTimeController.text = config.longBreakTime.toString();
+    _sessionUntilLongBreakController.text = config.sessionUntilLongBreak
+        .toString();
   }
 
   @override
@@ -100,91 +79,95 @@ class _SettingsFormState extends State<SettingsForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildNumberInput(
-                      label: "Tempo de trabalho (minutos)",
-                      controller: _workTimeController,
-                      icon: Icons.work_outline,
-                      minValue: _minTime,
-                      maxValue: _maxTime,
-                      onChanged: (value) {
-                        SettingsService.setWorkTime(value);
+    return Consumer<ConfigModelProvider>(
+      builder: (context, provider, child) {
+        return Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildNumberInput(
+                          label: "Tempo de trabalho (minutos)",
+                          controller: _workTimeController,
+                          icon: Icons.work_outline,
+                          minValue: _minTime,
+                          maxValue: _maxTime,
+                          onChanged: (value) {
+                            provider.onChangeWorkTime(value);
 
-                        setState(() {
-                          _workTime = value;
-                        });
-                      },
+                            setState(() {
+                              _workTime = value;
+                            });
+                          },
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        _buildNumberInput(
+                          label: "Tempo de pausa curta (minutos)",
+                          controller: _shortBreakTimeController,
+                          icon: Icons.coffee_outlined,
+                          minValue: _minTime,
+                          maxValue: _maxTime,
+                          onChanged: (value) {
+                            provider.onChangeShortBreakTime(value);
+
+                            setState(() {
+                              _shortBreakTime = value;
+                            });
+                          },
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        _buildNumberInput(
+                          label: "Tempo de pausa longa (minutos)",
+                          controller: _longBreakTimeController,
+                          icon: Icons.free_breakfast_outlined,
+                          minValue: _minTime,
+                          maxValue: _maxTime,
+                          onChanged: (value) {
+                            provider.onChangeLongBreakTime(value);
+
+                            setState(() {
+                              _longBreakTime = value;
+                            });
+                          },
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        _buildNumberInput(
+                          label: "Sessões até a pausa longa",
+                          controller: _sessionUntilLongBreakController,
+                          icon: Icons.repeat_outlined,
+                          minValue: _minSessions,
+                          maxValue: _maxSessions,
+                          onChanged: (value) {
+                            provider.onChangeSessionUntilLongBreak(value);
+
+                            setState(() {
+                              _sessionUntilLongBreak = value;
+                            });
+                          },
+                        ),
+                      ],
                     ),
-
-                    const SizedBox(height: 20),
-
-                    _buildNumberInput(
-                      label: "Tempo de pausa curta (minutos)",
-                      controller: _shortBreakTimeController,
-                      icon: Icons.coffee_outlined,
-                      minValue: _minTime,
-                      maxValue: _maxTime,
-                      onChanged: (value) {
-                        SettingsService.setShortBreakTime(value);
-
-                        setState(() {
-                          _shortBreakTime = value;
-                        });
-                      },
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    _buildNumberInput(
-                      label: "Tempo de pausa longa (minutos)",
-                      controller: _longBreakTimeController,
-                      icon: Icons.free_breakfast_outlined,
-                      minValue: _minTime,
-                      maxValue: _maxTime,
-                      onChanged: (value) {
-                        SettingsService.setLongBreakTime(value);
-
-                        setState(() {
-                          _longBreakTime = value;
-                        });
-                      },
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    _buildNumberInput(
-                      label: "Sessões até a pausa longa",
-                      controller: _sessionUntilLongBreakController,
-                      icon: Icons.repeat_outlined,
-                      minValue: _minSessions,
-                      maxValue: _maxSessions,
-                      onChanged: (value) {
-                        SettingsService.setSessionUntilLongBreak(value);
-
-                        setState(() {
-                          _sessionUntilLongBreak = value;
-                        });
-                      },
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

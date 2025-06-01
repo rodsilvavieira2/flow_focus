@@ -12,7 +12,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => TimerModelProvider()),
-        ChangeNotifierProvider(create: (_) => ConfigModelProvider()),
+        ChangeNotifierProvider(create: (_) => ConfigModelProvider()..load()),
       ],
       child: const MyApp(),
     ),
