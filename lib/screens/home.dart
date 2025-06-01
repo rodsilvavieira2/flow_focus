@@ -41,9 +41,9 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 22),
                 TimeControls(
                   onPause: provider.pauseTimer,
-                  onRestart: provider.restartTimer,
-                  onStart: provider.startTimer,
-                  onSkip: () {},
+                  onRestart: provider.onRestartTimer,
+                  onStart: provider.onStartTimer,
+                  onSkip: provider.onCompleteStep,
                   isRunning: provider.isRunning,
                 ),
                 const SizedBox(height: 22),

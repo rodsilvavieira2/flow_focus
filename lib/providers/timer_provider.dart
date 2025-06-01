@@ -31,7 +31,7 @@ class TimerModelProvider extends ChangeNotifier {
     _currentDuration = _totalDuration;
   }
 
-  void startTimer() {
+  void onStartTimer() {
     if (_isRunning) return;
 
     _isRunning = true;
@@ -43,7 +43,7 @@ class TimerModelProvider extends ChangeNotifier {
         _currentDuration = Duration(seconds: _currentDuration.inSeconds - 1);
         notifyListeners();
       } else {
-        _completeStep();
+        onCompleteStep();
       }
     });
   }
@@ -72,7 +72,7 @@ class TimerModelProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _completeStep() {
+  void onCompleteStep() {
     _timer?.cancel();
     _isRunning = false;
 
@@ -97,7 +97,7 @@ class TimerModelProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void restartTimer() {
+  void onRestartTimer() {
     _timer?.cancel();
     _isRunning = false;
 
