@@ -23,7 +23,7 @@ void main() async {
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
-    titleBarStyle: TitleBarStyle.hidden,
+    titleBarStyle: TitleBarStyle.normal,
     title: 'FlowFocus',
   );
 
@@ -63,10 +63,12 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  MyAppState createState() {
+    return MyAppState();
+  }
 }
 
-class _MyAppState extends State<MyApp> with WindowListener {
+class MyAppState extends State<MyApp> with WindowListener {
   final SystemTrayService _systemTrayService = SystemTrayService();
 
   @override
