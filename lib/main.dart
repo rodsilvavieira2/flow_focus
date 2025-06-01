@@ -11,8 +11,18 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => TimerModelProvider()),
         ChangeNotifierProvider(create: (_) => ConfigModelProvider()..load()),
+
+        ChangeNotifierProxyProvider<ConfigModelProvider, TimerModelProvider>(
+          create: (context) {
+            return TimerModelProvider(
+              Provider.of<ConfigModelProvider>(context, listen: false),
+            );
+          },
+          update: (context, config, previousTimer) {
+            return previousTimer ?? TimerModelProvider(config);
+          },
+        ),
       ],
       child: const MyApp(),
     ),
