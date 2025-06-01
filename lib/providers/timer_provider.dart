@@ -14,7 +14,7 @@ class TimerModelProvider extends ChangeNotifier {
   Duration get currentDuration => _currentDuration;
   Duration get totalDuration => _totalDuration;
   bool get isRunning => _isRunning;
-  PomoStepType get currentStep => currentStep;
+  PomoStepType get currentStep => _currentStep;
   double get progress =>
       1.0 - (_currentDuration.inSeconds / _totalDuration.inSeconds);
 
