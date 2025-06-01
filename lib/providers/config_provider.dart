@@ -1,7 +1,13 @@
-import 'package:flow_focus/services/settings_service.dart';
+import 'package:flow_focus/interface/settings_service.dart';
 import 'package:flutter/material.dart';
 
 class ConfigModelProvider extends ChangeNotifier {
+  final ISettingsService settingsService;
+
+  ConfigModelProvider({required this.settingsService}) {
+    load();
+  }
+
   int _workTime = 25;
   int _shortBreakTime = 5;
   int _longBreakTime = 15;
@@ -13,11 +19,11 @@ class ConfigModelProvider extends ChangeNotifier {
   get sessionUntilLongBreak => _sessionUntilLongBreak;
 
   Future<void> load() async {
-    final workTime = await SettingsService.getWorkTime();
-    final shortBreakTime = await SettingsService.getShortBreakTime();
-    final longBreakTime = await SettingsService.getLongBreakTime();
-    final sessionUntilLongBreak =
-        await SettingsService.getSessionUntilLongBreak();
+    final workTime = await settingsService.getWorkTime();
+    final shortBreakTime = await settingsService.getShortBreakTime();
+    final longBreakTime = await settingsService.getLongBreakTime();
+    final sessionUntilLongBreak = await settingsService
+        .getSessionUntilLongBreak();
 
     _workTime = workTime;
     _shortBreakTime = shortBreakTime;
@@ -29,25 +35,25 @@ class ConfigModelProvider extends ChangeNotifier {
 
   Future<void> onChangeWorkTime(int value) async {
     _workTime = value;
-    await SettingsService.setWorkTime(value);
+    await settingsService.setWorkTime(value);
     notifyListeners();
   }
 
   Future<void> onChangeShortBreakTime(int value) async {
     _shortBreakTime = value;
-    await SettingsService.setShortBreakTime(value);
+    await settingsService.setShortBreakTime(value);
     notifyListeners();
   }
 
   Future<void> onChangeLongBreakTime(int value) async {
     _longBreakTime = value;
-    await SettingsService.setLongBreakTime(value);
+    await settingsService.setLongBreakTime(value);
     notifyListeners();
   }
 
   Future<void> onChangeSessionUntilLongBreak(int value) async {
     _sessionUntilLongBreak = value;
-    await SettingsService.setSessionUntilLongBreak(value);
+    await settingsService.setSessionUntilLongBreak(value);
     notifyListeners();
   }
 }
