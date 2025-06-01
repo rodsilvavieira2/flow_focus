@@ -37,7 +37,7 @@ class TimeControls extends StatelessWidget {
         Visibility(
           visible: isRunning,
           child: IconButton.filled(
-            onPressed: onStart,
+            onPressed: onPause,
             icon: Icon(Icons.pause),
             iconSize: _iconSize,
           ),
@@ -54,7 +54,7 @@ class TimeControls extends StatelessWidget {
         const SizedBox(width: 12),
 
         IconButton.filled(
-          onPressed: onStart,
+          onPressed: onRestart,
           icon: Icon(Icons.restart_alt),
           iconSize: _iconSize,
         ),

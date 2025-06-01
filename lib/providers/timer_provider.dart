@@ -25,6 +25,8 @@ class TimerModelProvider extends ChangeNotifier {
 
     _isRunning = true;
 
+    notifyListeners();
+
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_currentDuration.inSeconds > 0) {
         _currentDuration = Duration(seconds: _currentDuration.inSeconds - 1);
@@ -38,7 +40,6 @@ class TimerModelProvider extends ChangeNotifier {
   void pauseTimer() {
     _timer?.cancel();
     _isRunning = false;
-    _currentDuration = _totalDuration;
 
     notifyListeners();
   }
