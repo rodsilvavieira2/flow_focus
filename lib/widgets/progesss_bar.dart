@@ -20,7 +20,7 @@ class ProgressBar extends StatelessWidget {
           ),
           SizedBox(height: 8),
           TweenAnimationBuilder<double>(
-            duration: Duration(microseconds: 300),
+            duration: Duration(milliseconds: 300),
             tween: Tween<double>(begin: 0, end: percent),
             builder: (context, value, child) {
               return LinearProgressIndicator(
