@@ -1,4 +1,5 @@
 import 'package:flow_focus/config/theme.dart';
+import 'package:flow_focus/providers/config_provider.dart';
 import 'package:flow_focus/providers/timer_provider.dart';
 import 'package:flow_focus/screens/home.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,10 @@ void main() async {
 
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => TimerModelProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => TimerModelProvider()),
+        ChangeNotifierProvider(create: (_) => ConfigModelProvider()),
+      ],
       child: const MyApp(),
     ),
   );
