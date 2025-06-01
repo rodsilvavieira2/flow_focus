@@ -23,22 +23,18 @@ class SettingsForm extends StatefulWidget {
 }
 
 class _SettingsFormState extends State<SettingsForm> {
-  // Default Pomodoro values
   int _workTime = 25;
   int _shortBreakTime = 5;
   int _longBreakTime = 15;
   int _sessionUntilLongBreak = 4;
 
-  // Controllers for text fields
   late TextEditingController _workTimeController;
   late TextEditingController _shortBreakTimeController;
   late TextEditingController _longBreakTimeController;
   late TextEditingController _sessionUntilLongBreakController;
 
-  // Form key for validation
   final _formKey = GlobalKey<FormState>();
 
-  // Value constraints
   static const int _minTime = 1;
   static const int _maxTime = 999;
   static const int _minSessions = 1;
