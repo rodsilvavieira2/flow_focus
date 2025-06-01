@@ -65,8 +65,8 @@ class NotificationService implements INotificationService {
     }
 
     await showTimerNotification(
-      title: 'Break Time! 🎉',
-      body: 'Time for a well-deserved break. Step away from your work.',
+      title: 'Hora do Intervalo! 🎉',
+      body: 'Hora de um merecido descanso. Afaste-se do seu trabalho.',
       actions: actions,
     );
   }
@@ -86,8 +86,8 @@ class NotificationService implements INotificationService {
     }
 
     await showTimerNotification(
-      title: 'Focus Time! 🎯',
-      body: 'Break is over. Time to get back to focused work.',
+      title: 'Hora do Foco! 🎯',
+      body: 'O intervalo acabou. Hora de voltar ao trabalho focado.',
       actions: actions,
     );
   }
@@ -107,8 +107,8 @@ class NotificationService implements INotificationService {
     }
 
     await showTimerNotification(
-      title: 'Session Complete! ✨',
-      body: 'Great job! You\'ve completed your focus session.',
+      title: 'Sessão Concluída! ✨',
+      body: 'Ótimo trabalho! Você concluiu sua sessão de foco.',
       actions: actions,
     );
   }
@@ -131,9 +131,9 @@ class NotificationService implements INotificationService {
     }
 
     await showTimerNotification(
-      title: 'Pomodoro Complete! 🍅',
+      title: 'Pomodoro Concluído! 🍅',
       body:
-          'You\'ve completed $completedPomodoros pomodoro${completedPomodoros > 1 ? 's' : ''}.',
+          'Você concluiu $completedPomodoros pomodoro${completedPomodoros > 1 ? 's' : ''}.',
       actions: actions,
     );
   }

@@ -105,7 +105,6 @@ class TimerModelProvider extends ChangeNotifier implements ITimerProvider {
 
       _notificationService.showBreakNotification();
 
-      // Show pomodoro complete notification
       _notificationService.showPomodoroCompleteNotification(
         completedPomodoros: _completedSessions,
         onAction: onStartTimer,
