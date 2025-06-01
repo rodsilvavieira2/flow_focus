@@ -87,12 +87,6 @@ class _SettingsFormState extends State<SettingsForm> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Configurações do Pomodoro',
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    const SizedBox(height: 24),
-
                     _buildNumberInput(
                       label: "Tempo de trabalho (minutos)",
                       controller: _workTimeController,
@@ -153,28 +147,6 @@ class _SettingsFormState extends State<SettingsForm> {
                   ],
                 ),
               ),
-            ),
-
-            const SizedBox(height: 24),
-
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: _resetToDefaults,
-                    icon: const Icon(Icons.refresh),
-                    label: const Text('Restaurar Padrões'),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: _saveSettings,
-                    icon: const Icon(Icons.save),
-                    label: const Text('Salvar'),
-                  ),
-                ),
-              ],
             ),
           ],
         ),
@@ -244,39 +216,5 @@ class _SettingsFormState extends State<SettingsForm> {
         ),
       ],
     );
-  }
-
-  void _resetToDefaults() {
-    setState(() {
-      _workTime = 25;
-      _shortBreakTime = 5;
-      _longBreakTime = 15;
-      _sessionUntilLongBreak = 4;
-
-      _workTimeController.text = _workTime.toString();
-      _shortBreakTimeController.text = _shortBreakTime.toString();
-      _longBreakTimeController.text = _longBreakTime.toString();
-      _sessionUntilLongBreakController.text = _sessionUntilLongBreak.toString();
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Configurações restauradas para os valores padrão'),
-        duration: Duration(seconds: 2),
-      ),
-    );
-  }
-
-  void _saveSettings() {
-    if (_formKey.currentState!.validate()) {
-      // Here you could save to SharedPreferences, database, etc.
-      // For now, we'll just show a confirmation
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Configurações salvas com sucesso!'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    }
   }
 }
