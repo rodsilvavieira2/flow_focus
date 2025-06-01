@@ -1,10 +1,11 @@
 import 'dart:async';
 
+import 'package:flow_focus/interface/timer_provider.dart';
 import 'package:flow_focus/providers/config_provider.dart';
 import 'package:flow_focus/widgets/step_type.dart';
 import 'package:flutter/material.dart';
 
-class TimerModelProvider extends ChangeNotifier {
+class TimerModelProvider extends ChangeNotifier implements ITimerProvider {
   final ConfigModelProvider _configModelProvider;
 
   TimerModelProvider(this._configModelProvider) {
@@ -19,10 +20,19 @@ class TimerModelProvider extends ChangeNotifier {
   PomoStepType _currentStep = PomoStepType.work;
   int _completedSessions = 0;
 
+  @override
   Duration get currentDuration => _currentDuration;
+
+  @override
   Duration get totalDuration => _totalDuration;
+
+  @override
   bool get isRunning => _isRunning;
+
+  @override
   PomoStepType get currentStep => _currentStep;
+
+  @override
   double get progress =>
       1.0 - (_currentDuration.inSeconds / _totalDuration.inSeconds);
 
@@ -31,6 +41,7 @@ class TimerModelProvider extends ChangeNotifier {
     _currentDuration = _totalDuration;
   }
 
+  @override
   void onStartTimer() {
     if (_isRunning) return;
 
@@ -65,6 +76,7 @@ class TimerModelProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  @override
   void pauseTimer() {
     _timer?.cancel();
     _isRunning = false;
@@ -72,6 +84,7 @@ class TimerModelProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  @override
   void onCompleteStep() {
     _timer?.cancel();
     _isRunning = false;
@@ -97,6 +110,7 @@ class TimerModelProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  @override
   void onRestartTimer() {
     _timer?.cancel();
     _isRunning = false;
