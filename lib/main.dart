@@ -11,10 +11,12 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ConfigModelProvider()..load()),
+        ChangeNotifierProvider(create: (_) => ConfigModelProvider()),
 
         ChangeNotifierProxyProvider<ConfigModelProvider, TimerModelProvider>(
           create: (context) {
+            Provider.of<ConfigModelProvider>(context, listen: false).load();
+
             return TimerModelProvider(
               Provider.of<ConfigModelProvider>(context, listen: false),
             );

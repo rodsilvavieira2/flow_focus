@@ -23,6 +23,8 @@ class ConfigModelProvider extends ChangeNotifier {
     _shortBreakTime = shortBreakTime;
     _longBreakTime = longBreakTime;
     _sessionUntilLongBreak = sessionUntilLongBreak;
+
+    notifyListeners();
   }
 
   Future<void> onChangeWorkTime(int value) async {
