@@ -1,3 +1,4 @@
+import 'package:flow_focus/services/settings_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -41,8 +42,13 @@ class _SettingsFormState extends State<SettingsForm> {
   static const int _maxSessions = 20;
 
   @override
-  void initState() {
+  void initState() async {
     super.initState();
+
+    _workTime = await SettingsService.getWorkTime();
+    _shortBreakTime = await SettingsService.getShortBreakTime();
+    _longBreakTime = await SettingsService.getLongBreakTime();
+    _sessionUntilLongBreak = await SettingsService.getSessionUntilLongBreak();
 
     _workTimeController = TextEditingController(text: _workTime.toString());
 
