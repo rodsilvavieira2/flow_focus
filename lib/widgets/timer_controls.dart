@@ -5,14 +5,14 @@ class TimeControls extends StatelessWidget {
   final VoidCallback onPause;
   final VoidCallback onRestart;
   final VoidCallback onSkip;
-  final bool isStated;
+  final bool isRunning;
 
   const TimeControls({
     super.key,
     required this.onPause,
     required this.onRestart,
     required this.onStart,
-    required this.isStated,
+    required this.isRunning,
     required this.onSkip,
   });
 
@@ -23,24 +23,30 @@ class TimeControls extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        IconButton.filled(
-          onPressed: onStart,
-          icon: Icon(Icons.play_arrow),
-          iconSize: _iconSize,
+        Visibility(
+          visible: !isRunning,
+          child: IconButton.filled(
+            onPressed: onStart,
+            icon: Icon(Icons.play_arrow),
+            iconSize: _iconSize,
+          ),
+        ),
+
+        const SizedBox(width: 12),
+
+        Visibility(
+          visible: isRunning,
+          child: IconButton.filled(
+            onPressed: onStart,
+            icon: Icon(Icons.pause),
+            iconSize: _iconSize,
+          ),
         ),
 
         const SizedBox(width: 12),
 
         IconButton.filled(
-          onPressed: onStart,
-          icon: Icon(Icons.pause),
-          iconSize: _iconSize,
-        ),
-
-        const SizedBox(width: 12),
-
-        IconButton.filled(
-          onPressed: isStated ? null : onSkip,
+          onPressed: isRunning ? null : onSkip,
           icon: Icon(Icons.skip_next),
           iconSize: _iconSize,
         ),

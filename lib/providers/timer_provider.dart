@@ -67,6 +67,13 @@ class TimerModelProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void restartTimer() {
+    _timer?.cancel();
+    _isRunning = false;
+    _currentDuration = _totalDuration;
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
