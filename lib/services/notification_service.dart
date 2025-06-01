@@ -57,7 +57,7 @@ class NotificationService implements INotificationService {
     if (onAction != null) {
       actions.add(
         PomoNotificationAction(
-          label: 'View Progress',
+          label: 'Iniciar',
           type: "start_action",
           onAction: onAction,
         ),
@@ -78,7 +78,7 @@ class NotificationService implements INotificationService {
     if (onAction != null) {
       actions.add(
         PomoNotificationAction(
-          label: 'View Progress',
+          label: 'Iniciar',
           type: "start_action",
           onAction: onAction,
         ),
@@ -99,7 +99,7 @@ class NotificationService implements INotificationService {
     if (onAction != null) {
       actions.add(
         PomoNotificationAction(
-          label: 'View Progress',
+          label: 'Iniciar',
           type: "start_action",
           onAction: onAction,
         ),
@@ -123,7 +123,7 @@ class NotificationService implements INotificationService {
     if (onAction != null) {
       actions.add(
         PomoNotificationAction(
-          label: 'View Progress',
+          label: 'Inciar',
           type: "start_action",
           onAction: onAction,
         ),
