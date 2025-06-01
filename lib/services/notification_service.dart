@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flow_focus/interface/notification_service.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:local_notifier/local_notifier.dart';
 
 class NotificationService implements INotificationService {
@@ -50,7 +51,7 @@ class NotificationService implements INotificationService {
   }
 
   @override
-  Future<void> showBreakNotification() async {
+  Future<void> showBreakNotification({VoidCallback? onAction}) async {
     await showTimerNotification(
       title: 'Break Time! 🎉',
       body: 'Time for a well-deserved break. Step away from your work.',
@@ -59,7 +60,7 @@ class NotificationService implements INotificationService {
   }
 
   @override
-  Future<void> showFocusNotification() async {
+  Future<void> showFocusNotification({VoidCallback? onAction}) async {
     await showTimerNotification(
       title: 'Focus Time! 🎯',
       body: 'Break is over. Time to get back to focused work.',
@@ -68,7 +69,7 @@ class NotificationService implements INotificationService {
   }
 
   @override
-  Future<void> showSessionCompleteNotification() async {
+  Future<void> showSessionCompleteNotification({VoidCallback? onAction}) async {
     await showTimerNotification(
       title: 'Session Complete! ✨',
       body: 'Great job! You\'ve completed your focus session.',
@@ -77,13 +78,19 @@ class NotificationService implements INotificationService {
   }
 
   @override
-  Future<void> showPomodoroCompleteNotification(int completedPomodoros) async {
+  Future<void> showPomodoroCompleteNotification({
+    required int completedPomodoros,
+    VoidCallback? onAction,
+  }) async {
     await showTimerNotification(
       title: 'Pomodoro Complete! 🍅',
       body:
           'You\'ve completed $completedPomodoros pomodoro${completedPomodoros > 1 ? 's' : ''}.',
       actions: [],
     );
+    if (onAction != null) {
+      onAction();
+    }
   }
 
   @override

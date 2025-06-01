@@ -57,27 +57,30 @@ abstract class INotificationService {
   /// This is a convenience method that displays a pre-configured notification
   /// to inform the user that their work session has ended and it's time
   /// for a break.
-  Future<void> showBreakNotification();
+  Future<void> showBreakNotification({VoidCallback? onAction});
 
   /// Shows a notification when break time ends and work should resume.
   ///
   /// This is a convenience method that displays a pre-configured notification
   /// to inform the user that their break is over and they should return
   /// to focused work.
-  Future<void> showFocusNotification();
+  Future<void> showFocusNotification({VoidCallback? onAction});
 
   /// Shows a notification when an entire Pomodoro session is complete.
   ///
   /// This is displayed when the user has completed all work sessions
   /// and breaks in a full Pomodoro cycle.
-  Future<void> showSessionCompleteNotification();
+  Future<void> showSessionCompleteNotification({VoidCallback? onAction});
 
   /// Shows a notification when a single Pomodoro work period is complete.
   ///
   /// [completedPomodoros] The total number of Pomodoros completed in the session
   ///
   /// This helps users track their progress through multiple Pomodoro cycles.
-  Future<void> showPomodoroCompleteNotification(int completedPomodoros);
+  Future<void> showPomodoroCompleteNotification({
+    required int completedPomodoros,
+    VoidCallback? onAction,
+  });
 
   /// Shows a system tray notification for background app events.
   ///

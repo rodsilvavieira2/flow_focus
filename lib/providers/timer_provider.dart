@@ -106,7 +106,9 @@ class TimerModelProvider extends ChangeNotifier implements ITimerProvider {
       _notificationService.showBreakNotification();
 
       // Show pomodoro complete notification
-      _notificationService.showPomodoroCompleteNotification(_completedSessions);
+      _notificationService.showPomodoroCompleteNotification(
+        completedPomodoros: _completedSessions,
+      );
     } else {
       _currentStep = PomoStepType.work;
       _totalDuration = Duration(minutes: _configModelProvider.workTime);
