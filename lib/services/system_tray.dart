@@ -41,9 +41,9 @@ class SystemTrayService {
     if (Platform.isWindows) {
       return 'assets/icons/app_icon.ico';
     } else if (Platform.isMacOS) {
-      return 'assets/icons/app_icon.png';
+      return 'assets/icons/focusFlow.png';
     } else {
-      return 'assets/icons/app_icon.png';
+      return 'assets/icons/focusFlow.png';
     }
   }
 
