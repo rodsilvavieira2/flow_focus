@@ -42,14 +42,8 @@ class _SettingsFormState extends State<SettingsForm> {
   static const int _maxSessions = 20;
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-
-    _workTime = await SettingsService.getWorkTime();
-    _shortBreakTime = await SettingsService.getShortBreakTime();
-    _longBreakTime = await SettingsService.getLongBreakTime();
-    _sessionUntilLongBreak = await SettingsService.getSessionUntilLongBreak();
-
     _workTimeController = TextEditingController(text: _workTime.toString());
 
     _shortBreakTimeController = TextEditingController(
@@ -63,6 +57,36 @@ class _SettingsFormState extends State<SettingsForm> {
     _sessionUntilLongBreakController = TextEditingController(
       text: _sessionUntilLongBreak.toString(),
     );
+
+    _loadSettings().then((_) {
+      _workTimeController = TextEditingController(text: _workTime.toString());
+
+      _shortBreakTimeController = TextEditingController(
+        text: _shortBreakTime.toString(),
+      );
+
+      _longBreakTimeController = TextEditingController(
+        text: _longBreakTime.toString(),
+      );
+
+      _sessionUntilLongBreakController = TextEditingController(
+        text: _sessionUntilLongBreak.toString(),
+      );
+    });
+  }
+
+  Future<void> _loadSettings() async {
+    _workTime = await SettingsService.getWorkTime();
+    _shortBreakTime = await SettingsService.getShortBreakTime();
+    _longBreakTime = await SettingsService.getLongBreakTime();
+    _sessionUntilLongBreak = await SettingsService.getSessionUntilLongBreak();
+
+    setState(() {
+      _workTime = _workTime;
+      _shortBreakTime = _shortBreakTime;
+      _longBreakTime = _longBreakTime;
+      _sessionUntilLongBreak = _sessionUntilLongBreak;
+    });
   }
 
   @override
@@ -96,6 +120,8 @@ class _SettingsFormState extends State<SettingsForm> {
                       minValue: _minTime,
                       maxValue: _maxTime,
                       onChanged: (value) {
+                        SettingsService.setWorkTime(value);
+
                         setState(() {
                           _workTime = value;
                         });
@@ -111,6 +137,8 @@ class _SettingsFormState extends State<SettingsForm> {
                       minValue: _minTime,
                       maxValue: _maxTime,
                       onChanged: (value) {
+                        SettingsService.setShortBreakTime(value);
+
                         setState(() {
                           _shortBreakTime = value;
                         });
@@ -126,6 +154,8 @@ class _SettingsFormState extends State<SettingsForm> {
                       minValue: _minTime,
                       maxValue: _maxTime,
                       onChanged: (value) {
+                        SettingsService.setLongBreakTime(value);
+
                         setState(() {
                           _longBreakTime = value;
                         });
@@ -141,6 +171,8 @@ class _SettingsFormState extends State<SettingsForm> {
                       minValue: _minSessions,
                       maxValue: _maxSessions,
                       onChanged: (value) {
+                        SettingsService.setSessionUntilLongBreak(value);
+
                         setState(() {
                           _sessionUntilLongBreak = value;
                         });
