@@ -184,12 +184,24 @@ class _SettingsFormState extends State<SettingsForm> {
             LengthLimitingTextInputFormatter(3),
           ],
           decoration: InputDecoration(
-            border: const OutlineInputBorder(),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Theme.of(context).primaryColor),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.red),
+            ),
             suffixText: label.contains('Sessões') ? 'sessões' : 'min',
             hintText: 'Digite um valor entre $minValue e $maxValue',
             contentPadding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 8,
+              horizontal: 16,
+              vertical: 12,
             ),
           ),
           validator: (value) {
