@@ -1,3 +1,4 @@
+import 'package:flow_focus/providers/config_provider.dart';
 import 'package:flow_focus/providers/timer_provider.dart';
 import 'package:flow_focus/screens/settings.dart';
 import 'package:flow_focus/widgets/progesss_bar.dart';
@@ -31,6 +32,8 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Consumer<TimerModelProvider>(
         builder: (context, provider, child) {
+          Provider.of<ConfigModelProvider>(context, listen: false).load();
+
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
