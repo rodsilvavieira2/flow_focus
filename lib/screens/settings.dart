@@ -97,10 +97,6 @@ class _SettingsFormState extends State<SettingsForm> {
                           maxValue: _maxTime,
                           onChanged: (value) {
                             provider.onChangeWorkTime(value);
-
-                            setState(() {
-                              _workTime = value;
-                            });
                           },
                         ),
 
@@ -114,10 +110,6 @@ class _SettingsFormState extends State<SettingsForm> {
                           maxValue: _maxTime,
                           onChanged: (value) {
                             provider.onChangeShortBreakTime(value);
-
-                            setState(() {
-                              _shortBreakTime = value;
-                            });
                           },
                         ),
 
@@ -131,10 +123,6 @@ class _SettingsFormState extends State<SettingsForm> {
                           maxValue: _maxTime,
                           onChanged: (value) {
                             provider.onChangeLongBreakTime(value);
-
-                            setState(() {
-                              _longBreakTime = value;
-                            });
                           },
                         ),
 
@@ -148,10 +136,6 @@ class _SettingsFormState extends State<SettingsForm> {
                           maxValue: _maxSessions,
                           onChanged: (value) {
                             provider.onChangeSessionUntilLongBreak(value);
-
-                            setState(() {
-                              _sessionUntilLongBreak = value;
-                            });
                           },
                         ),
                       ],
