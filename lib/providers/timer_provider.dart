@@ -1,9 +1,17 @@
 import 'dart:async';
 
+import 'package:flow_focus/providers/config_provider.dart';
 import 'package:flow_focus/widgets/step_type.dart';
 import 'package:flutter/material.dart';
 
 class TimerModelProvider extends ChangeNotifier {
+  final ConfigModelProvider _configModelProvider;
+
+  TimerModelProvider(this._configModelProvider) {
+    _configModelProvider.addListener(_onConfigChanged);
+    _initializeFormConfig();
+  }
+
   Timer? _timer;
   Duration _currentDuration = const Duration(minutes: 25);
   Duration _totalDuration = const Duration(minutes: 25);
@@ -17,6 +25,11 @@ class TimerModelProvider extends ChangeNotifier {
   PomoStepType get currentStep => _currentStep;
   double get progress =>
       1.0 - (_currentDuration.inSeconds / _totalDuration.inSeconds);
+
+  void _initializeFormConfig() {
+    _totalDuration = Duration(minutes: _configModelProvider.workTime);
+    _currentDuration = _totalDuration;
+  }
 
   void startTimer() {
     if (_isRunning) return;
@@ -33,6 +46,23 @@ class TimerModelProvider extends ChangeNotifier {
         _completeStep();
       }
     });
+  }
+
+  void _onConfigChanged() {
+    if (isRunning) return;
+
+    switch (_currentStep) {
+      case PomoStepType.work:
+        _totalDuration = Duration(minutes: _configModelProvider.workTime);
+      case PomoStepType.shortBreak:
+        _totalDuration = Duration(minutes: _configModelProvider.shortBreakTime);
+      case PomoStepType.longBreak:
+        _totalDuration = Duration(minutes: _configModelProvider.longBreakTime);
+    }
+
+    _currentDuration = _totalDuration;
+
+    notifyListeners();
   }
 
   void pauseTimer() {
