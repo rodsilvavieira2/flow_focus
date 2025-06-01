@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 /// Interface for managing application notifications across different platforms.
 ///
 /// This interface provides a contract for implementing notification services
@@ -47,7 +49,7 @@ abstract class INotificationService {
   Future<void> showTimerNotification({
     required String title,
     required String body,
-    String? payload,
+    required List<PomoNotificationAction> actions,
   });
 
   /// Shows a notification when a work session breaks starts.
@@ -104,24 +106,6 @@ abstract class INotificationService {
   /// or when the app is being closed/reset.
   Future<void> cancelAllNotifications();
 
-  /// Schedules a notification to be shown at a specific time.
-  ///
-  /// [id] Unique identifier for the scheduled notification
-  /// [title] The notification title (required)
-  /// [body] The notification message content (required)
-  /// [scheduledDate] When the notification should be displayed
-  /// [payload] Optional data that can be retrieved when notification is tapped
-  ///
-  /// This is useful for scheduling notifications in advance, such as
-  /// reminding users when their break time will end.
-  Future<void> scheduleNotification({
-    required int id,
-    required String title,
-    required String body,
-    required DateTime scheduledDate,
-    String? payload,
-  });
-
   /// Checks if notifications are enabled/permitted on the current platform.
   ///
   /// Returns `true` if the app has permission to show notifications,
@@ -137,4 +121,16 @@ abstract class INotificationService {
   /// This should be called if [areNotificationsEnabled] returns `false`
   /// and the app needs to show notifications.
   Future<bool> requestNotificationPermissions();
+}
+
+class PomoNotificationAction {
+  final VoidCallback onAction;
+  final String label;
+  final String type;
+
+  PomoNotificationAction({
+    required this.onAction,
+    required this.label,
+    required this.type,
+  });
 }

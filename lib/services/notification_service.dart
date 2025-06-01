@@ -4,10 +4,6 @@ import 'package:flow_focus/interface/notification_service.dart';
 import 'package:local_notifier/local_notifier.dart';
 
 class NotificationService implements INotificationService {
-  static final NotificationService _instance = NotificationService._internal();
-  factory NotificationService() => _instance;
-  NotificationService._internal();
-
   @override
   Future<void> initialize() async {
     if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
@@ -22,21 +18,35 @@ class NotificationService implements INotificationService {
   Future<void> showTimerNotification({
     required String title,
     required String body,
-    String? payload,
+    required List<PomoNotificationAction> actions,
   }) async {
-    if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
-      LocalNotification notification = LocalNotification(
-        title: title,
-        body: body,
-        silent: false,
-      );
+    LocalNotification notification = LocalNotification(
+      title: title,
+      body: body,
+    );
 
-      if (Platform.isMacOS) {
-        notification.actions = [LocalNotificationAction(text: 'OK')];
-      }
+    if (actions.isNotEmpty) {
+      notification.actions = actions
+          .map(
+            (action) =>
+                LocalNotificationAction(text: action.label, type: action.type),
+          )
+          .toList();
 
-      await notification.show();
+      notification.onClickAction = (indexAction) {
+        var action = notification.actions?[indexAction];
+
+        if (action == null) return;
+
+        PomoNotificationAction configAction = actions.firstWhere(
+          (it) => it.type == action.type,
+        );
+
+        configAction.onAction();
+      };
     }
+
+    await notification.show();
   }
 
   @override
@@ -44,6 +54,7 @@ class NotificationService implements INotificationService {
     await showTimerNotification(
       title: 'Break Time! 🎉',
       body: 'Time for a well-deserved break. Step away from your work.',
+      actions: [],
     );
   }
 
@@ -52,6 +63,7 @@ class NotificationService implements INotificationService {
     await showTimerNotification(
       title: 'Focus Time! 🎯',
       body: 'Break is over. Time to get back to focused work.',
+      actions: [],
     );
   }
 
@@ -60,6 +72,7 @@ class NotificationService implements INotificationService {
     await showTimerNotification(
       title: 'Session Complete! ✨',
       body: 'Great job! You\'ve completed your focus session.',
+      actions: [],
     );
   }
 
@@ -69,6 +82,7 @@ class NotificationService implements INotificationService {
       title: 'Pomodoro Complete! 🍅',
       body:
           'You\'ve completed $completedPomodoros pomodoro${completedPomodoros > 1 ? 's' : ''}.',
+      actions: [],
     );
   }
 
@@ -86,17 +100,6 @@ class NotificationService implements INotificationService {
 
       await notification.show();
     }
-  }
-
-  @override
-  Future<void> scheduleNotification({
-    required int id,
-    required String title,
-    required String body,
-    required DateTime scheduledDate,
-    String? payload,
-  }) async {
-    await showTimerNotification(title: title, body: body, payload: payload);
   }
 
   @override
