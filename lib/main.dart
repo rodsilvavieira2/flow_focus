@@ -1,23 +1,18 @@
 import 'package:flow_focus/config/theme.dart';
+import 'package:flow_focus/providers/timer_provider.dart';
 import 'package:flow_focus/screens/home.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // await windowManager.ensureInitialized();
-
-  // WindowOptions windowOptions = WindowOptions(
-  //   size: Size(800, 600),
-  //   titleBarStyle: TitleBarStyle.normal,
-  // );
-
-  // windowManager.waitUntilReadyToShow(windowOptions, () async {
-  //   await windowManager.show();
-  //   await windowManager.focus();
-  // });
-
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => TimerModelProvider())],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

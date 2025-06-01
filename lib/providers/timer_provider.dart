@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 enum StepTypes { work, shortBreak, longBreak }
 
-class TimeModel extends ChangeNotifier {
+class TimerModelProvider extends ChangeNotifier {
   Timer? _timer;
   Duration _currentDuration = const Duration(minutes: 25);
   Duration _totalDuration = const Duration(minutes: 25);
