@@ -13,7 +13,7 @@ class FocusFlowDarkTheme {
   static const _onPrimary = Colors.white;
 
   static ThemeData get theme {
-    final base = ThemeData.dark();
+    final base = ThemeData.dark(useMaterial3: true);
 
     return base.copyWith(
       // Cores principais
@@ -100,7 +100,7 @@ class FocusFlowLightTheme {
   static const _onBg = Color(0xFF0F111E); // texto/ícone principal (quase-preto)
 
   static ThemeData get theme {
-    final base = ThemeData.light();
+    final base = ThemeData.light(useMaterial3: true);
 
     return base.copyWith(
       colorScheme: ColorScheme(
