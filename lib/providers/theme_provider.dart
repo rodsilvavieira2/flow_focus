@@ -35,5 +35,7 @@ class ThemeModelProvider extends ChangeNotifier implements IThemeProvider {
     var themeMode = await _settingsService.getThemeMode();
 
     _themeMode = themeMode;
+
+    notifyListeners();
   }
 }

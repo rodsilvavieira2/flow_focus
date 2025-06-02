@@ -9,7 +9,6 @@ class Timer extends StatelessWidget {
     return Text(
       _formatDuration(duration),
       style: Theme.of(context).textTheme.displayLarge?.copyWith(
-        color: Theme.of(context).colorScheme.onPrimary,
         fontWeight: FontWeight.bold,
         fontSize: 74,
       ),
