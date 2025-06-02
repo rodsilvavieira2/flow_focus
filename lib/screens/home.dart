@@ -1,3 +1,4 @@
+import 'package:flow_focus/providers/theme_provider.dart';
 import 'package:flow_focus/providers/timer_provider.dart';
 import 'package:flow_focus/screens/settings.dart';
 import 'package:flow_focus/widgets/progesss_bar.dart';
@@ -15,10 +16,20 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('FocusFlow'),
+        title: Consumer<ThemeModelProvider>(
+          builder: (context, value, child) {
+            return Row(
+              children: [
+                value.loadThemeIcon(value.currentTheme),
+                const SizedBox(width: 8),
+                const Text('FocusFlow'),
+              ],
+            );
+          },
+        ),
         centerTitle: false,
         actions: [
-          ThemeSwitch(),
+          const ThemeSwitch(),
 
           IconButton(
             onPressed: () {
@@ -27,9 +38,9 @@ class HomeScreen extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => SettingsScreen()),
               );
             },
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
           ),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
         ],
       ),
       body: Consumer<TimerModelProvider>(

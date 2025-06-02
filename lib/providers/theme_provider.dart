@@ -38,4 +38,16 @@ class ThemeModelProvider extends ChangeNotifier implements IThemeProvider {
 
     notifyListeners();
   }
+
+  @override
+  Image loadThemeIcon(ThemeMode themeMode) {
+    switch (themeMode) {
+      case ThemeMode.light:
+        return Image.asset("assets/icons/app_icon.png", height: 32, width: 32);
+      case ThemeMode.dark:
+        return Image.asset("assets/icons/app_icon.png", height: 32, width: 32);
+      case ThemeMode.system:
+        return Image.asset("assets/icons/app_icon.png", height: 32, width: 32);
+    }
+  }
 }

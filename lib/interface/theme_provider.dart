@@ -12,4 +12,6 @@ abstract class IThemeProvider {
   bool get isLightMode;
 
   bool get isSystemMode;
+
+  Image loadThemeIcon(ThemeMode themeMode);
 }
