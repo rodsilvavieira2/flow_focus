@@ -102,6 +102,7 @@ class MyAppState extends State<MyApp> with WindowListener {
       debugShowCheckedModeBanner: false,
       theme: FocusFlowLightTheme.theme,
       darkTheme: FocusFlowDarkTheme.theme,
+      themeMode: ThemeMode.system,
       home: const HomeScreen(),
     );
   }

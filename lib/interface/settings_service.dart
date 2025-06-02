@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// Interface for managing application settings and configuration persistence.
 ///
 /// This interface defines the contract for storing and retrieving user preferences
@@ -70,4 +72,8 @@ abstract class ISettingsService {
   /// - Long break: 15 minutes
   /// - Sessions until long break: 4
   Future<void> resetToDefaults();
+
+  Future<void> setThemeMode(ThemeMode input);
+
+  Future<ThemeMode> getThemeMode();
 }

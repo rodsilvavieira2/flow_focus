@@ -1,4 +1,5 @@
 import 'package:flow_focus/interface/settings_service.dart';
+import 'package:flutter/src/material/app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsService implements ISettingsService {
@@ -6,6 +7,7 @@ class SettingsService implements ISettingsService {
   static const String _shortBreakTimeKey = "short_break_time";
   static const String _longBreakTimeKey = "long_break_time";
   static const String _sessionUntilLongBreakKey = "session_until_long";
+  static const String _settingsVersionKey = "theme_mode";
 
   static const int defaultWorkTime = 25;
   static const int defaultShortBreakTime = 5;
@@ -68,5 +70,33 @@ class SettingsService implements ISettingsService {
     await prefs.remove(_shortBreakTimeKey);
     await prefs.remove(_longBreakTimeKey);
     await prefs.remove(_sessionUntilLongBreakKey);
+  }
+
+  @override
+  Future<void> setThemeMode(ThemeMode input) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString(_settingsVersionKey, input.name.toString());
+  }
+
+  @override
+  Future<ThemeMode> getThemeMode() {
+    return SharedPreferences.getInstance().then((prefs) {
+      final themeModeString = prefs.getString(_settingsVersionKey);
+
+      if (themeModeString == null) {
+        return ThemeMode.system; // Default to system theme if not set
+      }
+
+      switch (themeModeString) {
+        case 'light':
+          return ThemeMode.light;
+        case 'dark':
+          return ThemeMode.dark;
+        case 'system':
+        default:
+          return ThemeMode.system;
+      }
+    });
   }
 }
