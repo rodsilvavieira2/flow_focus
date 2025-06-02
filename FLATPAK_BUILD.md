@@ -5,13 +5,14 @@ This document explains how to build and distribute Flow Focus as a Flatpak packa
 ## Prerequisites
 
 1. **Flatpak and flatpak-builder**: Install these on your system
+
    ```bash
    # On Ubuntu/Debian
    sudo apt install flatpak flatpak-builder
-   
+
    # On Fedora
    sudo dnf install flatpak flatpak-builder
-   
+
    # On Arch Linux
    sudo pacman -S flatpak flatpak-builder
    ```
@@ -34,6 +35,7 @@ Simply run the provided build script:
 ```
 
 This script will:
+
 1. Clean and rebuild the Flutter app for Linux
 2. Install required Flatpak runtimes
 3. Build the Flatpak package
@@ -42,6 +44,7 @@ This script will:
 ### Method 2: Manual build
 
 1. **Build the Flutter app first**:
+
    ```bash
    flutter clean
    flutter pub get
@@ -49,6 +52,7 @@ This script will:
    ```
 
 2. **Install required Flatpak runtimes**:
+
    ```bash
    flatpak install --user flathub org.freedesktop.Platform//23.08 org.freedesktop.Sdk//23.08
    ```
@@ -71,11 +75,13 @@ flatpak run com.rodrigo.flow_focus
 ### Creating a repository for distribution
 
 1. **Export to a repository**:
+
    ```bash
    flatpak build-export repo build-dir
    ```
 
 2. **Create a bundle file for easy distribution**:
+
    ```bash
    flatpak build-bundle repo flow_focus.flatpak com.rodrigo.flow_focus
    ```
@@ -113,6 +119,7 @@ The `com.rodrigo.flow_focus.yml` file is configured to:
 2. **Missing Flutter bundle**: Ensure you've built the Flutter app with `flutter build linux --release` before building the Flatpak
 
 3. **Runtime not found**: Install the required runtime with:
+
    ```bash
    flatpak install flathub org.freedesktop.Platform//23.08
    ```
