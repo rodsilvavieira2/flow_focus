@@ -5,7 +5,6 @@ import 'package:flow_focus/providers/timer_provider.dart';
 import 'package:flow_focus/screens/home.dart';
 import 'package:flow_focus/services/notification_service.dart';
 import 'package:flow_focus/services/settings_service.dart';
-import 'package:flow_focus/services/system_tray.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
@@ -74,35 +73,8 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> with WindowListener {
-  final SystemTrayService _systemTrayService = SystemTrayService();
-
-  @override
-  void initState() {
-    super.initState();
-    windowManager.addListener(this);
-    _initSystemTray();
-  }
-
-  @override
-  void dispose() {
-    windowManager.removeListener(this);
-    _systemTrayService.destroy();
-    super.dispose();
-  }
-
-  Future<void> _initSystemTray() async {
-    await _systemTrayService.initSystemTray();
-  }
-
-  @override
-  void onWindowClose() async {
-    await _systemTrayService.hideToTray();
-  }
-
   @override
   Widget build(BuildContext context) {
-    _initSystemTray();
-
     return Consumer<ThemeModelProvider>(
       builder: (context, provider, child) {
         return MaterialApp(

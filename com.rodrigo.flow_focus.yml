@@ -1,0 +1,81 @@
+app-id: com.rodrigo.flow_focus
+runtime: org.gnome.Platform
+runtime-version: '47'
+sdk: org.gnome.Sdk
+command: flow_focus
+
+finish-args:
+  # Allow access to the desktop
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  
+  # Allow desktop notifications
+  - --talk-name=org.freedesktop.Notifications
+  
+  # Allow access to sound for notification sounds
+  - --socket=pulseaudio
+  
+  # Allow access to settings/preferences
+  - --filesystem=xdg-config/flow_focus:create
+  
+  # Allow system tray access
+  - --talk-name=org.kde.StatusNotifierWatcher
+  - --talk-name=org.freedesktop.StatusNotifierWatcher
+  
+  # Additional system permissions for proper library access
+  - --share=network
+  - --device=dri
+
+modules:
+  - name: flow_focus
+    buildsystem: simple
+    build-commands:
+      # Create the application directory
+      - mkdir -p /app/bin
+      - mkdir -p /app/share/applications
+      - mkdir -p /app/share/metainfo
+      - mkdir -p /app/share/icons/hicolor/256x256/apps
+      
+      # Copy the precompiled Flutter app
+      - cp -r bundle/* /app/
+      
+      # Make the executable... executable
+      - chmod +x /app/flow_focus
+      
+      # Create a wrapper script for proper execution
+      - |
+        cat > /app/bin/flow_focus << 'EOF'
+        #!/bin/bash
+        export FLUTTER_ROOT=/app
+        export LD_LIBRARY_PATH=/app/lib:$LD_LIBRARY_PATH
+        # Ensure runtime libraries are available
+        export PATH=/app/bin:$PATH
+        exec /app/flow_focus "$@"
+        EOF
+      - chmod +x /app/bin/flow_focus
+      
+      # Install desktop file and metadata
+      - install -Dm644 com.rodrigo.flow_focus.desktop /app/share/applications/
+      - install -Dm644 com.rodrigo.flow_focus.metainfo.xml /app/share/metainfo/
+      
+      # Install icon
+      - install -Dm644 app_icon.png /app/share/icons/hicolor/256x256/apps/com.rodrigo.flow_focus.png
+      
+    sources:
+      # This will use your precompiled Flutter Linux bundle
+      - type: dir
+        path: build/linux/x64/release/bundle
+        dest: bundle
+      
+      # Include the desktop file and metadata
+      - type: file
+        path: com.rodrigo.flow_focus.desktop
+      
+      - type: file
+        path: com.rodrigo.flow_focus.metainfo.xml
+      
+      # Include the app icon
+      - type: file
+        path: assets/icons/app_icon.png
+        dest-filename: app_icon.png
