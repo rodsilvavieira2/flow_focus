@@ -1,5 +1,6 @@
 import 'package:flow_focus/config/theme.dart';
 import 'package:flow_focus/providers/config_provider.dart';
+import 'package:flow_focus/providers/theme_provider.dart';
 import 'package:flow_focus/providers/timer_provider.dart';
 import 'package:flow_focus/screens/home.dart';
 import 'package:flow_focus/services/notification_service.dart';
@@ -12,11 +13,11 @@ import 'package:window_manager/window_manager.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await windowManager.ensureInitialized();
+
   final notificationService = NotificationService();
   await notificationService.initialize();
   final settingsService = SettingsService();
-
-  await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = WindowOptions(
     size: const Size(800, 600),
@@ -52,6 +53,10 @@ void main() async {
             return previousTimer ??
                 TimerModelProvider(config, notificationService);
           },
+        ),
+
+        ChangeNotifierProvider(
+          create: (_) => ThemeModelProvider(settingsService),
         ),
       ],
       child: const MyApp(),
@@ -98,12 +103,16 @@ class MyAppState extends State<MyApp> with WindowListener {
   Widget build(BuildContext context) {
     _initSystemTray();
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: FocusFlowLightTheme.theme,
-      darkTheme: FocusFlowDarkTheme.theme,
-      themeMode: ThemeMode.system,
-      home: const HomeScreen(),
+    return Consumer<ThemeModelProvider>(
+      builder: (context, provider, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: FocusFlowLightTheme.theme,
+          darkTheme: FocusFlowDarkTheme.theme,
+          themeMode: provider.currentTheme,
+          home: const HomeScreen(),
+        );
+      },
     );
   }
 }
