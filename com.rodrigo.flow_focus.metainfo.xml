@@ -21,7 +21,15 @@
   </description>
   <launchable type="desktop-id">com.rodrigo.flow_focus.desktop</launchable>
   <url type="homepage">https://github.com/yourusername/flow_focus</url>
+  <url type="bugtracker">https://github.com/yourusername/flow_focus/issues</url>
+  <url type="vcs-browser">https://github.com/yourusername/flow_focus</url>
   <developer_name>Rodrigo</developer_name>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/yourusername/flow_focus/main/screenshots/main-window.png</image>
+      <caption>Main timer interface</caption>
+    </screenshot>
+  </screenshots>
   <content_rating type="oars-1.1" />
   <releases>
     <release version="1.0.0" date="2025-06-02">
