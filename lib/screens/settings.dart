@@ -181,21 +181,7 @@ class _SettingsFormState extends State<SettingsForm> {
           ],
           decoration: InputDecoration(
             filled: true,
-            fillColor: Theme.of(context).colorScheme.primary,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Theme.of(context).colorScheme.surface,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                width: 2,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: Colors.red),
