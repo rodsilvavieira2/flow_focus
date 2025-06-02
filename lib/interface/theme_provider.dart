@@ -6,4 +6,10 @@ abstract class IThemeProvider {
   ThemeMode get currentTheme;
 
   Future<void> onChangeThemeMode(ThemeMode input);
+
+  bool get isDarkMode;
+
+  bool get isLightMode;
+
+  bool get isSystemMode;
 }
