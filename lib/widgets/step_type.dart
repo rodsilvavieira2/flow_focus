@@ -12,19 +12,18 @@ class StepType extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-          child: Row(
-            children: [
-              _getStepIcon(step),
-              SizedBox(width: 8),
-              _getStepText(step),
-              SizedBox(width: 8),
-            ],
+        Card(
+          elevation: 0,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                _getStepIcon(step),
+                SizedBox(width: 8),
+                _getStepText(step),
+                SizedBox(width: 8),
+              ],
+            ),
           ),
         ),
       ],
