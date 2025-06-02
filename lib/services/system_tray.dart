@@ -38,13 +38,19 @@ class SystemTrayService {
   }
 
   String _getIconPath() {
-    if (Platform.isWindows) {
-      return 'assets/icons/app_icon.ico';
-    } else if (Platform.isMacOS) {
-      return 'assets/icons/focusFlow.png';
-    } else {
-      return 'assets/icons/focusFlow.png';
+    if (Platform.isLinux) {
+      // Try to use a system icon or absolute path in release builds
+      final iconPath = Platform.resolvedExecutable.replaceAll(
+        '/flow_focus',
+        '/data/flutter_assets/assets/icons/focusFlow.png',
+      );
+      if (File(iconPath).existsSync()) {
+        return iconPath;
+      }
+      // Fallback to a system icon
+      return '/usr/share/icons/hicolor/48x48/apps/application-default-icon.png';
     }
+    return 'assets/icons/focusFlow.png';
   }
 
   Future<void> _showWindow() async {

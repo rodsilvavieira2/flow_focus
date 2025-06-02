@@ -96,6 +96,8 @@ class MyAppState extends State<MyApp> with WindowListener {
 
   @override
   Widget build(BuildContext context) {
+    _initSystemTray();
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: FocusFlowLightTheme.theme,
