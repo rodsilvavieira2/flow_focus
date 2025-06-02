@@ -102,10 +102,10 @@ class FocusFlowLightTheme {
     return base.copyWith(
       colorScheme: ColorScheme(
         brightness: Brightness.light,
-        primary: _primary,
-        onPrimary: _onPrimary,
-        secondary: _secondary,
-        onSecondary: _onSecondary,
+        primary: _secondary,
+        onPrimary: _onSecondary,
+        secondary: _primary,
+        onSecondary: _onPrimary,
         surface: _surface,
         onSurface: _onSurface,
         error: Colors.red,
