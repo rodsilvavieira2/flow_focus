@@ -25,7 +25,7 @@ class ThemeSwitch extends StatelessWidget {
                   Icon(
                     Icons.light_mode,
                     color: themeProvider.isLightMode
-                        ? Theme.of(context).primaryColor
+                        ? Theme.of(context).colorScheme.primary
                         : null,
                   ),
                   const SizedBox(width: 8),
@@ -33,7 +33,7 @@ class ThemeSwitch extends StatelessWidget {
                     'Light',
                     style: TextStyle(
                       color: themeProvider.isLightMode
-                          ? Theme.of(context).primaryColor
+                          ? Theme.of(context).colorScheme.primary
                           : null,
                       fontWeight: themeProvider.isLightMode
                           ? FontWeight.bold
@@ -50,7 +50,7 @@ class ThemeSwitch extends StatelessWidget {
                   Icon(
                     Icons.dark_mode,
                     color: themeProvider.isDarkMode
-                        ? Theme.of(context).primaryColor
+                        ? Theme.of(context).colorScheme.primary
                         : null,
                   ),
                   const SizedBox(width: 8),
@@ -58,7 +58,7 @@ class ThemeSwitch extends StatelessWidget {
                     'Dark',
                     style: TextStyle(
                       color: themeProvider.isDarkMode
-                          ? Theme.of(context).primaryColor
+                          ? Theme.of(context).colorScheme.primary
                           : null,
                       fontWeight: themeProvider.isDarkMode
                           ? FontWeight.bold
@@ -75,7 +75,7 @@ class ThemeSwitch extends StatelessWidget {
                   Icon(
                     Icons.auto_mode,
                     color: themeProvider.isSystemMode
-                        ? Theme.of(context).primaryColor
+                        ? Theme.of(context).colorScheme.primary
                         : null,
                   ),
                   const SizedBox(width: 8),
@@ -83,7 +83,7 @@ class ThemeSwitch extends StatelessWidget {
                     'System',
                     style: TextStyle(
                       color: themeProvider.isSystemMode
-                          ? Theme.of(context).primaryColor
+                          ? Theme.of(context).colorScheme.primary
                           : null,
                       fontWeight: themeProvider.isSystemMode
                           ? FontWeight.bold
