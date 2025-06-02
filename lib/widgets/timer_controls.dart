@@ -28,13 +28,13 @@ class TimeControls extends StatelessWidget {
                 onPressed: onPause,
                 icon: Icon(Icons.pause),
                 iconSize: _iconSize,
-                tooltip: 'Pausar',
+                tooltip: 'Pause',
               )
             : IconButton.filled(
                 onPressed: onStart,
                 icon: Icon(Icons.play_arrow),
                 iconSize: _iconSize,
-                tooltip: 'Iniciar',
+                tooltip: 'Start',
               ),
 
         const SizedBox(width: 12),
@@ -43,7 +43,7 @@ class TimeControls extends StatelessWidget {
           onPressed: isRunning ? null : onSkip,
           icon: Icon(Icons.skip_next),
           iconSize: _iconSize,
-          tooltip: isRunning ? 'Aguarde o término ou pause' : 'Pular etapa',
+          tooltip: isRunning ? 'Wait for completion or pause' : 'Skip step',
         ),
 
         const SizedBox(width: 12),
@@ -52,7 +52,7 @@ class TimeControls extends StatelessWidget {
           onPressed: onRestart,
           icon: Icon(Icons.restart_alt),
           iconSize: _iconSize,
-          tooltip: 'Reiniciar',
+          tooltip: 'Restart',
         ),
       ],
     );

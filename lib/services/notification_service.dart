@@ -57,7 +57,7 @@ class NotificationService implements INotificationService {
     if (onAction != null) {
       actions.add(
         PomoNotificationAction(
-          label: 'Iniciar',
+          label: 'Start',
           type: "start_action",
           onAction: onAction,
         ),
@@ -65,8 +65,8 @@ class NotificationService implements INotificationService {
     }
 
     await showTimerNotification(
-      title: 'Hora do Intervalo! 🎉',
-      body: 'Hora de um merecido descanso. Afaste-se do seu trabalho.',
+      title: 'Break Time! 🎉',
+      body: 'Time for a well-deserved break. Step away from your work.',
       actions: actions,
     );
   }
@@ -78,7 +78,7 @@ class NotificationService implements INotificationService {
     if (onAction != null) {
       actions.add(
         PomoNotificationAction(
-          label: 'Iniciar',
+          label: 'Start',
           type: "start_action",
           onAction: onAction,
         ),
@@ -86,8 +86,8 @@ class NotificationService implements INotificationService {
     }
 
     await showTimerNotification(
-      title: 'Hora do Foco! 🎯',
-      body: 'O intervalo acabou. Hora de voltar ao trabalho focado.',
+      title: 'Focus Time! 🎯',
+      body: 'Break is over. Time to get back to focused work.',
       actions: actions,
     );
   }
@@ -99,7 +99,7 @@ class NotificationService implements INotificationService {
     if (onAction != null) {
       actions.add(
         PomoNotificationAction(
-          label: 'Iniciar',
+          label: 'Start',
           type: "start_action",
           onAction: onAction,
         ),
@@ -107,8 +107,8 @@ class NotificationService implements INotificationService {
     }
 
     await showTimerNotification(
-      title: 'Sessão Concluída! ✨',
-      body: 'Ótimo trabalho! Você concluiu sua sessão de foco.',
+      title: 'Session Complete! ✨',
+      body: 'Great work! You have completed your focus session.',
       actions: actions,
     );
   }
@@ -123,7 +123,7 @@ class NotificationService implements INotificationService {
     if (onAction != null) {
       actions.add(
         PomoNotificationAction(
-          label: 'Inciar',
+          label: 'Start',
           type: "start_action",
           onAction: onAction,
         ),
@@ -131,9 +131,9 @@ class NotificationService implements INotificationService {
     }
 
     await showTimerNotification(
-      title: 'Pomodoro Concluído! 🍅',
+      title: 'Pomodoro Complete! 🍅',
       body:
-          'Você concluiu $completedPomodoros pomodoro${completedPomodoros > 1 ? 's' : ''}.',
+          'You completed $completedPomodoros pomodoro${completedPomodoros > 1 ? 's' : ''}.',
       actions: actions,
     );
   }

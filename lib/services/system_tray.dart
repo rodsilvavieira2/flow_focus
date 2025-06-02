@@ -22,8 +22,8 @@ class SystemTrayService {
     // Create context menu
     final Menu menu = Menu();
     await menu.buildFrom([
-      MenuItemLabel(label: 'Mostrar', onClicked: (menuItem) => _showWindow()),
-      MenuItemLabel(label: 'Sair', onClicked: (menuItem) => _exitApp()),
+      MenuItemLabel(label: 'Show', onClicked: (menuItem) => _showWindow()),
+      MenuItemLabel(label: 'Exit', onClicked: (menuItem) => _exitApp()),
     ]);
 
     await _systemTray.setContextMenu(menu);

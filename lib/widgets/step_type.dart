@@ -32,9 +32,9 @@ class StepType extends StatelessWidget {
 
   _getStepText(PomoStepType input) {
     return switch (input) {
-      PomoStepType.work => Text("Foco!"),
-      PomoStepType.shortBreak => Text("Um pouco de descanso"),
-      PomoStepType.longBreak => Text("Pegue um cafe e relaxe"),
+      PomoStepType.work => Text("Focus!"),
+      PomoStepType.shortBreak => Text("Take a short break"),
+      PomoStepType.longBreak => Text("Grab some coffee and relax"),
     };
   }
 

@@ -9,7 +9,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Configurações'), elevation: 0),
+      appBar: AppBar(title: const Text('Settings'), elevation: 0),
       body: const SettingsForm(),
     );
   }
@@ -90,7 +90,7 @@ class _SettingsFormState extends State<SettingsForm> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildNumberInput(
-                          label: "Tempo de trabalho (minutos)",
+                          label: "Work time (minutes)",
                           controller: _workTimeController,
                           icon: Icons.work_outline,
                           minValue: _minTime,
@@ -103,7 +103,7 @@ class _SettingsFormState extends State<SettingsForm> {
                         const SizedBox(height: 20),
 
                         _buildNumberInput(
-                          label: "Tempo de pausa curta (minutos)",
+                          label: "Short break time (minutes)",
                           controller: _shortBreakTimeController,
                           icon: Icons.coffee_outlined,
                           minValue: _minTime,
@@ -116,7 +116,7 @@ class _SettingsFormState extends State<SettingsForm> {
                         const SizedBox(height: 20),
 
                         _buildNumberInput(
-                          label: "Tempo de pausa longa (minutos)",
+                          label: "Long break time (minutes)",
                           controller: _longBreakTimeController,
                           icon: Icons.free_breakfast_outlined,
                           minValue: _minTime,
@@ -129,7 +129,7 @@ class _SettingsFormState extends State<SettingsForm> {
                         const SizedBox(height: 20),
 
                         _buildNumberInput(
-                          label: "Sessões até a pausa longa",
+                          label: "Sessions until long break",
                           controller: _sessionUntilLongBreakController,
                           icon: Icons.repeat_outlined,
                           minValue: _minSessions,
@@ -186,8 +186,8 @@ class _SettingsFormState extends State<SettingsForm> {
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: Colors.red),
             ),
-            suffixText: label.contains('Sessões') ? 'sessões' : 'min',
-            hintText: 'Digite um valor entre $minValue e $maxValue',
+            suffixText: label.contains('Sessions') ? 'sessions' : 'min',
+            hintText: 'Enter a value between $minValue and $maxValue',
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 12,
@@ -195,14 +195,14 @@ class _SettingsFormState extends State<SettingsForm> {
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Este campo é obrigatório';
+              return 'This field is required';
             }
             final intValue = int.tryParse(value);
             if (intValue == null) {
-              return 'Digite um número válido';
+              return 'Enter a valid number';
             }
             if (intValue < minValue || intValue > maxValue) {
-              return 'Valor deve estar entre $minValue e $maxValue';
+              return 'Value must be between $minValue and $maxValue';
             }
             return null;
           },
