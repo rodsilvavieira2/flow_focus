@@ -83,9 +83,16 @@ class FocusFlowLightTheme {
   // ─────────────────── Paleta extraída do mock ───────────────────
   static const _background = Color(0xFFF8F9FC); // cinza-gelo (#f8f9fc)
   static const _surface = Color(0xFFE6E9F3); // pill Skip + AppBar (#e6e9f3)
+  static const _onSurface = Color(
+    0xFF0F111E,
+  ); // texto/ícone principal (quase-preto)
   static const _primary = Color(0xFF607AFB); // azul principal (#607afb)
+  static const _secondary = Color(0xFFB0B5C9); // cinza claro (#b0b5c9)
+  static const _onSecondary = Color(
+    0xFF0F111E,
+  ); // texto/ícone secundário (preto)
   static const _track = Color(0xFFD1D5EB); // trilho da barra de progresso
-  static const _subtleText = Color(0xFF9EA2B4); // texto secundário
+  static const _subtleText = Color(0xFF0F111E); // texto secundário
   static const _onPrimary = Colors.white;
   static const _onBg = Color(0xFF0F111E); // texto/ícone principal (quase-preto)
 
@@ -93,14 +100,14 @@ class FocusFlowLightTheme {
     final base = ThemeData.light();
 
     return base.copyWith(
-      colorScheme: const ColorScheme(
+      colorScheme: ColorScheme(
         brightness: Brightness.light,
         primary: _primary,
         onPrimary: _onPrimary,
-        secondary: _surface,
-        onSecondary: _onBg,
-        surface: _background,
-        onSurface: _onBg,
+        secondary: _secondary,
+        onSecondary: _onSecondary,
+        surface: _surface,
+        onSurface: _onSurface,
         error: Colors.red,
         onError: _onPrimary,
       ),
@@ -113,7 +120,7 @@ class FocusFlowLightTheme {
         displayMedium: const TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 48,
-          color: _onBg,
+          color: _subtleText,
         ),
       ),
 
