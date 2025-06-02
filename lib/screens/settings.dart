@@ -33,7 +33,7 @@ class _SettingsFormState extends State<SettingsForm> {
   final _formKey = GlobalKey<FormState>();
 
   static const int _minTime = 1;
-  static const int _maxTime = 999;
+  static const int _maxTime = 60;
   static const int _minSessions = 1;
   static const int _maxSessions = 20;
 
