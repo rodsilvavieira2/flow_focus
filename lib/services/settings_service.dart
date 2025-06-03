@@ -1,5 +1,5 @@
 import 'package:flow_focus/interface/settings_service.dart';
-import 'package:flutter/src/material/app.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsService implements ISettingsService {
