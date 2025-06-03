@@ -22,7 +22,7 @@ jobs:
       - name: Instalar dependências de sistema
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libnotify-dev libdbus-1-dev
 
       # Instala o SDK Flutter e habilita cache (~/.pub-cache e bin/cache)
       - uses: subosito/flutter-action@v2
