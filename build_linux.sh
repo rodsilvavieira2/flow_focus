@@ -28,8 +28,6 @@ mkdir -p "$TEMP_DIR"
 
 # Copy necessary files
 cp -r build/linux/x64/release/bundle/* "$TEMP_DIR/"
-cp com.rodrigo.flow_focus.desktop "$TEMP_DIR/"
-cp -r assets "$TEMP_DIR/"
 
 # Create the tar archive
 tar -czf "$TAR_NAME" "$TEMP_DIR"
