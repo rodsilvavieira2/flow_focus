@@ -15,8 +15,8 @@
     <p>Features:</p>
     <ul>
       <li>Customizable work and break intervals</li>
-      <li>Desktop notifications</li>
-      <li>Dark and light theme support</li>
+      <li>Desktop notifications</li>a <li>Dark and
+      light theme support</li>
     </ul>
   </description>
   <launchable type="desktop-id">com.rodrigo.flow_focus.desktop</launchable>
