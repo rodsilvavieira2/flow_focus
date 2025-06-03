@@ -2,7 +2,7 @@ name: Release Linux (Flutter)
 
 on:
   push:
-    branches: [release] # altere se usar outro branch-de-release
+    branches: [master] # altere se usar outro branch-de-release
 
 permissions:
   contents: write # necessário para criar/alterar Releases
