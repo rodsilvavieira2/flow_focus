@@ -20,9 +20,9 @@
     </ul>
   </description>
   <launchable type="desktop-id">com.rodrigo.flow_focus.desktop</launchable>
-  <url type="homepage">https://github.com/yourusername/flow_focus</url>
-  <url type="bugtracker">https://github.com/yourusername/flow_focus/issues</url>
-  <url type="vcs-browser">https://github.com/yourusername/flow_focus</url>
+  <url type="homepage">https://github.com/rodsilvavieira2/flow_focus</url>
+  <url type="bugtracker">https://github.com/rodsilvavieira2/flow_focus/issues</url>
+  <url type="vcs-browser">https://github.com/rodsilvavieira2/flow_focus</url>
   <developer_name>Rodrigo</developer_name>
   <screenshots>
     <screenshot type="default">
