@@ -31,14 +31,16 @@ modules:
   - name: flow_focus
     buildsystem: simple
     build-commands:
-      # Create the application directory
+      # Create the application directory structure
       - mkdir -p /app/bin
       - mkdir -p /app/share/applications
       - mkdir -p /app/share/metainfo
       - mkdir -p /app/share/icons/hicolor/256x256/apps
       
-      # Copy the precompiled Flutter app
-      - cp -r bundle/* /app/
+      # Copy the precompiled Flutter app (archive is automatically extracted)
+      - cp flow_focus /app/
+      - cp -r lib /app/
+      - cp -r data /app/
       
       # Make the executable... executable
       - chmod +x /app/flow_focus
@@ -63,19 +65,22 @@ modules:
       - install -Dm644 app_icon.png /app/share/icons/hicolor/256x256/apps/com.rodrigo.flow_focus.png
       
     sources:
-      # This will use your precompiled Flutter Linux bundle
-      - type: dir
-        path: build/linux/x64/release/bundle
-        dest: bundle
-      
-      # Include the desktop file and metadata
+      # Download the latest release from GitHub
+      - type: archive
+        url: https://github.com/rodsilvavieira2/flow_focus/releases/download/linux-3/flow_focus-linux-x64.tar.gz
+        sha256: 19009e6031dd4aad046b44b7ecbc8c8204792c09031a482317049e3bc7658a4c
+        
+      # Include the desktop file and metadata from the repository
       - type: file
-        path: com.rodrigo.flow_focus.desktop
-      
+        url: https://raw.githubusercontent.com/rodsilvavieira2/flow_focus/master/com.rodrigo.flow_focus.desktop
+        sha256: 54834461254518324b7a91fac9dc2164f8eb55324a1819d0bfab8d551f0f7efe
+        
       - type: file
-        path: com.rodrigo.flow_focus.metainfo.xml
-      
-      # Include the app icon
+        url: https://raw.githubusercontent.com/rodsilvavieira2/flow_focus/master/com.rodrigo.flow_focus.metainfo.xml
+        sha256: a49de5f99578a58dd83b01ba6efd232ee11426940042c08ea1f1dbb3b442879d
+        
+      # Include the app icon from the repository
       - type: file
-        path: assets/icons/app_icon.png
+        url: https://raw.githubusercontent.com/rodsilvavieira2/flow_focus/master/assets/icons/app_icon.png
+        sha256: 4df801f62f9c3b0ef475e6e04937a1148190d9b6784908a3e778fac8a0314052
         dest-filename: app_icon.png
