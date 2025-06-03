@@ -2,78 +2,69 @@ name: Release Linux (Flutter)
 
 on:
   push:
-    branches:
-      - master # ajuste se usar outro branch de release
+    branches: [release] # altere se usar outro branch-de-release
 
 permissions:
-  contents: write # necessário para criar / atualizar a release
+  contents: write # necessário para criar/alterar Releases
 
 env:
-  APP_NAME: flow_focus # <-- troque pelo nome real do seu executável
+  APP_NAME: flow_focus # ⇢ troque pelo nome real do executável
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
+      # 1. Checkout
       - uses: actions/checkout@v4
 
-      # Dependências que o Flutter precisa para compilar no Ubuntu
-      - name: Instalar dependências de sistema
+      # 2. Dependências de sistema para Flutter desktop + local_notifier
+      - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libnotify-dev libdbus-1-dev
+          sudo apt-get install -y \
+            clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev \
+            libnotify-dev libdbus-1-dev     # requeridos pelo plugin local_notifier :contentReference[oaicite:0]{index=0}
 
-      # Instala o SDK Flutter e habilita cache (~/.pub-cache e bin/cache)
+      # 3. Instalar/Cache do SDK Flutter
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
           cache: true
 
-      - name: Habilitar suporte desktop Linux
-        run: flutter config --enable-linux-desktop
+      # 4. Build do app Linux (modo release)
+      - run: flutter config --enable-linux-desktop
+      - run: flutter pub get
+      - run: flutter build linux --release
 
-      - name: Resolver dependências
-        run: flutter pub get
-
-      - name: Build release Linux
-        run: flutter build linux --release
-
-      - name: Empacotar binário
+      # 5. Empacotar executável em .tar.gz
+      - name: Package binary
         run: |
           cd build/linux/x64/release
-          tar -czf ${APP_NAME}-linux-x64.tar.gz bundle
-          mv ${APP_NAME}-linux-x64.tar.gz ${GITHUB_WORKSPACE}/
+          tar -czf "$APP_NAME-linux-x64.tar.gz" bundle
+          mv "$APP_NAME-linux-x64.tar.gz" "$GITHUB_WORKSPACE/"
 
+      # 6. Publicar artefato para o job seguinte
       - uses: actions/upload-artifact@v4
         with:
           name: linux-binary
           path: ${{ env.APP_NAME }}-linux-x64.tar.gz
+          retention-days: 3
 
   publish:
     needs: build
     runs-on: ubuntu-latest
-
     steps:
+      # 1. Baixar artefato gerado
       - uses: actions/download-artifact@v4
         with:
           name: linux-binary
           path: .
 
-      # Cria (ou atualiza) a release e anexa o arquivo
-      - name: Criar release
-        id: create_release
-        uses: actions/create-release@v2
+      # 2. Criar ou atualizar a Release e anexar o binário
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2 # Action que une "create + upload" :contentReference[oaicite:1]{index=1}
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: linux-${{ github.run_number }} # ex.: linux-23
-          release_name: "Linux build ${{ github.run_number }}"
+          tag_name: linux-${{ github.run_number }}
+          name: "Linux build ${{ github.run_number }}"
           generate_release_notes: true
-
-      - name: Enviar binário para a release
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ env.APP_NAME }}-linux-x64.tar.gz
-          asset_name: ${{ env.APP_NAME }}-linux-x64.tar.gz
-          asset_content_type: application/gzip
+          files: ${{ env.APP_NAME }}-linux-x64.tar.gz
