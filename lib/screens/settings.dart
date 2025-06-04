@@ -179,7 +179,9 @@ class _SettingsFormState extends State<SettingsForm> {
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.red),
+              borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.error,
+              ),
             ),
             suffixText: label.contains('Sessions') ? 'sessions' : 'min',
             hintText: 'Enter a value between $minValue and $maxValue',
