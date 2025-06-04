@@ -1,7 +1,7 @@
 import 'package:flow_focus/providers/theme_provider.dart';
 import 'package:flow_focus/providers/timer_provider.dart';
 import 'package:flow_focus/screens/settings.dart';
-import 'package:flow_focus/widgets/progesss_bar.dart';
+import 'package:flow_focus/widgets/progress_bar.dart';
 import 'package:flow_focus/widgets/step_type.dart';
 import 'package:flow_focus/widgets/theme_switch.dart';
 import 'package:flow_focus/widgets/timer.dart';

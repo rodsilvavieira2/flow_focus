@@ -98,7 +98,7 @@ lib/
 │   ├── notification_service.dart
 │   └── settings_service.dart
 └── widgets/              # Reusable UI components
-    ├── progesss_bar.dart
+    ├── progress_bar.dart
     ├── step_type.dart
     ├── theme_switch.dart
     ├── timer_controls.dart
