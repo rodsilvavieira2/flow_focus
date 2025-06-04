@@ -30,6 +30,8 @@ finish-args:
 modules:
   - name: flow_focus
     buildsystem: simple
+    only-arches:
+      - x86_64
     build-commands:
       # Create the application directory structure
       - mkdir -p /app/bin
