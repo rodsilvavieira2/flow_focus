@@ -76,71 +76,63 @@ class _SettingsFormState extends State<SettingsForm> {
   Widget build(BuildContext context) {
     return Consumer<ConfigModelProvider>(
       builder: (context, provider, child) {
+        var padding = MediaQuery.of(context).size.width * 0.20;
+
         return Form(
           key: _formKey,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.symmetric(horizontal: padding),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildNumberInput(
-                          label: "Work time (minutes)",
-                          controller: _workTimeController,
-                          icon: Icons.work_outline,
-                          minValue: _minTime,
-                          maxValue: _maxTime,
-                          onChanged: (value) {
-                            provider.onChangeWorkTime(value);
-                          },
-                        ),
+                _buildNumberInput(
+                  label: "Work time (minutes)",
+                  controller: _workTimeController,
+                  icon: Icons.work_outline,
+                  minValue: _minTime,
+                  maxValue: _maxTime,
+                  onChanged: (value) {
+                    provider.onChangeWorkTime(value);
+                  },
+                ),
 
-                        const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-                        _buildNumberInput(
-                          label: "Short break time (minutes)",
-                          controller: _shortBreakTimeController,
-                          icon: Icons.coffee_outlined,
-                          minValue: _minTime,
-                          maxValue: _maxTime,
-                          onChanged: (value) {
-                            provider.onChangeShortBreakTime(value);
-                          },
-                        ),
+                _buildNumberInput(
+                  label: "Short break time (minutes)",
+                  controller: _shortBreakTimeController,
+                  icon: Icons.coffee_outlined,
+                  minValue: _minTime,
+                  maxValue: _maxTime,
+                  onChanged: (value) {
+                    provider.onChangeShortBreakTime(value);
+                  },
+                ),
 
-                        const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-                        _buildNumberInput(
-                          label: "Long break time (minutes)",
-                          controller: _longBreakTimeController,
-                          icon: Icons.free_breakfast_outlined,
-                          minValue: _minTime,
-                          maxValue: _maxTime,
-                          onChanged: (value) {
-                            provider.onChangeLongBreakTime(value);
-                          },
-                        ),
+                _buildNumberInput(
+                  label: "Long break time (minutes)",
+                  controller: _longBreakTimeController,
+                  icon: Icons.free_breakfast_outlined,
+                  minValue: _minTime,
+                  maxValue: _maxTime,
+                  onChanged: (value) {
+                    provider.onChangeLongBreakTime(value);
+                  },
+                ),
 
-                        const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-                        _buildNumberInput(
-                          label: "Sessions until long break",
-                          controller: _sessionUntilLongBreakController,
-                          icon: Icons.repeat_outlined,
-                          minValue: _minSessions,
-                          maxValue: _maxSessions,
-                          onChanged: (value) {
-                            provider.onChangeSessionUntilLongBreak(value);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
+                _buildNumberInput(
+                  label: "Sessions until long break",
+                  controller: _sessionUntilLongBreakController,
+                  icon: Icons.repeat_outlined,
+                  minValue: _minSessions,
+                  maxValue: _maxSessions,
+                  onChanged: (value) {
+                    provider.onChangeSessionUntilLongBreak(value);
+                  },
                 ),
               ],
             ),
@@ -180,7 +172,6 @@ class _SettingsFormState extends State<SettingsForm> {
             LengthLimitingTextInputFormatter(3),
           ],
           decoration: InputDecoration(
-            filled: true,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
