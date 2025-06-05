@@ -130,10 +130,15 @@ class TimerModelProvider extends ChangeNotifier implements ITimerProvider {
     switch (_currentStep) {
       case PomoStepType.work:
         _totalDuration = Duration(minutes: _configModelProvider.workTime);
+        break;
+
       case PomoStepType.shortBreak:
         _totalDuration = Duration(minutes: _configModelProvider.shortBreakTime);
+        break;
+
       case PomoStepType.longBreak:
         _totalDuration = Duration(minutes: _configModelProvider.longBreakTime);
+        break;
     }
 
     _currentDuration = _totalDuration;
