@@ -13,6 +13,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [x64, aarch64]
     steps:
       # 1. Checkout
       - uses: actions/checkout@v4
@@ -23,7 +26,22 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev \
-            libnotify-dev libdbus-1-dev     # requeridos pelo plugin local_notifier :contentReference[oaicite:0]{index=0}
+            libnotify-dev libdbus-1-dev     # requeridos pelo plugin local_notifier
+
+      # 2.1. Install cross-compilation tools for aarch64
+      - name: Install aarch64 cross-compilation tools
+        if: matrix.arch == 'aarch64'
+        run: |
+          sudo apt-get install -y \
+            gcc-aarch64-linux-gnu \
+            g++-aarch64-linux-gnu \
+            libgtk-3-dev:arm64 \
+            libnotify-dev:arm64 \
+            libdbus-1-dev:arm64
+          
+          # Add arm64 architecture
+          sudo dpkg --add-architecture arm64
+          sudo apt-get update
 
       # 3. Instalar/Cache do SDK Flutter
       - uses: subosito/flutter-action@v2
@@ -34,37 +52,67 @@ jobs:
       # 4. Build do app Linux (modo release)
       - run: flutter config --enable-linux-desktop
       - run: flutter pub get
-      - run: flutter build linux --release
+      
+      # 4.1. Build for x64
+      - name: Build for x64
+        if: matrix.arch == 'x64'
+        run: flutter build linux --release
+      
+      # 4.2. Build for aarch64
+      - name: Build for aarch64
+        if: matrix.arch == 'aarch64'
+        run: |
+          export CC=aarch64-linux-gnu-gcc
+          export CXX=aarch64-linux-gnu-g++
+          export AR=aarch64-linux-gnu-ar
+          export STRIP=aarch64-linux-gnu-strip
+          export PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig
+          flutter build linux --release --target-platform linux-arm64
 
       # 5. Empacotar executável em .tar.gz
-      - name: Package binary
+      - name: Package x64 binary
+        if: matrix.arch == 'x64'
         run: |
           cd build/linux/x64/release
           tar -czf "$APP_NAME-linux-x64.tar.gz" bundle
           mv "$APP_NAME-linux-x64.tar.gz" "$GITHUB_WORKSPACE/"
+      
+      - name: Package aarch64 binary
+        if: matrix.arch == 'aarch64'
+        run: |
+          cd build/linux/arm64/release
+          tar -czf "$APP_NAME-linux-aarch64.tar.gz" bundle
+          mv "$APP_NAME-linux-aarch64.tar.gz" "$GITHUB_WORKSPACE/"
 
       # 6. Publicar artefato para o job seguinte
       - uses: actions/upload-artifact@v4
         with:
-          name: linux-binary
-          path: ${{ env.APP_NAME }}-linux-x64.tar.gz
+          name: linux-binary-${{ matrix.arch }}
+          path: ${{ env.APP_NAME }}-linux-${{ matrix.arch }}.tar.gz
           retention-days: 3
 
   publish:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      # 1. Baixar artefato gerado
+      # 1. Baixar artefatos gerados
       - uses: actions/download-artifact@v4
         with:
-          name: linux-binary
+          name: linux-binary-x64
+          path: .
+      
+      - uses: actions/download-artifact@v4
+        with:
+          name: linux-binary-aarch64
           path: .
 
-      # 2. Criar ou atualizar a Release e anexar o binário
+      # 2. Criar ou atualizar a Release e anexar os binários
       - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v2 # Action que une "create + upload" :contentReference[oaicite:1]{index=1}
+        uses: softprops/action-gh-release@v2 # Action que une "create + upload"
         with:
           tag_name: linux-${{ github.run_number }}
           name: "Linux build ${{ github.run_number }}"
           generate_release_notes: true
-          files: ${{ env.APP_NAME }}-linux-x64.tar.gz
+          files: |
+            ${{ env.APP_NAME }}-linux-x64.tar.gz
+            ${{ env.APP_NAME }}-linux-aarch64.tar.gz
