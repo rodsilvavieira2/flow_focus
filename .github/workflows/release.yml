@@ -7,7 +7,7 @@ on:
 
 env:
   APP_NAME: flow_focus
-  FLUTTER_VERSION: 3.32.1
+  FLUTTER_VERSION: stable
 
 jobs:
   build:
