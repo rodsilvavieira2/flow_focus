@@ -81,7 +81,7 @@ class _SettingsFormState extends State<SettingsForm> {
         return Form(
           key: _formKey,
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: padding),
+            padding: EdgeInsets.symmetric(horizontal: padding, vertical: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -150,75 +150,95 @@ class _SettingsFormState extends State<SettingsForm> {
     required int maxValue,
     required ValueChanged<int> onChanged,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 20),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+            Row(
+              children: [
+                Icon(icon, size: 20),
+                const SizedBox(width: 8),
+                Text(
+                  label,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            TextFormField(
+              controller: controller,
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(3),
+              ],
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Color(0xFF252B44),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                ),
+                suffixText: label.contains('Sessions') ? 'sessions' : 'min',
+                suffixStyle: Theme.of(context).textTheme.bodyMedium,
+                hintText: 'Enter a value between $minValue and $maxValue',
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'This field is required';
+                }
+                final intValue = int.tryParse(value);
+                if (intValue == null) {
+                  return 'Enter a valid number';
+                }
+                if (intValue < minValue || intValue > maxValue) {
+                  return 'Value must be between $minValue and $maxValue';
+                }
+                return null;
+              },
+              onChanged: (value) {
+                final newValue = int.tryParse(value);
+                if (newValue != null &&
+                    newValue >= minValue &&
+                    newValue <= maxValue) {
+                  onChanged(newValue);
+                }
+              },
             ),
           ],
         ),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: controller,
-          keyboardType: TextInputType.number,
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-            LengthLimitingTextInputFormatter(3),
-          ],
-          decoration: InputDecoration(
-            filled: true,
-            border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Theme.of(context).colorScheme.error,
-              ),
-            ),
-            suffixText: label.contains('Sessions') ? 'sessions' : 'min',
-            hintText: 'Enter a value between $minValue and $maxValue',
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-          ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'This field is required';
-            }
-            final intValue = int.tryParse(value);
-            if (intValue == null) {
-              return 'Enter a valid number';
-            }
-            if (intValue < minValue || intValue > maxValue) {
-              return 'Value must be between $minValue and $maxValue';
-            }
-            return null;
-          },
-          onChanged: (value) {
-            final newValue = int.tryParse(value);
-            if (newValue != null &&
-                newValue >= minValue &&
-                newValue <= maxValue) {
-              onChanged(newValue);
-            }
-          },
-        ),
-      ],
+      ),
     );
   }
+}
+
+Color lighten(Color color, [double amount = 0.1]) {
+  // Convert the color to HSL
+  final hsl = HSLColor.fromColor(color);
+  // Increase the lightness, clamping it between 0.0 and 1.0
+  final hslLight = hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
+  // Convert back to Color
+  return hslLight.toColor();
 }

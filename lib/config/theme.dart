@@ -2,21 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FocusFlowDarkTheme {
-  static const _background = Color(0xFF101323); // navy quase-preto
-  static const _surface = Color(0xFF1C223C); // cards / skip-btn
-  static const _onSurface = Color(
-    0xFFBFC2D1,
-  ); // texto/ícone principal (cinza claro)
-  static const _primary = Color(0xFF5E78F7); // barra de progresso, botão Start
-  static const _track = Color(0xFF2E3868); // trilho da progress-bar
-  static const _subtleText = Colors.white; // legendas / texto secundário
+  static const _background = Color(0xFF101323);
+  static const _surface = Color(0xFF1C223C);
+  static const _onSurface = Color(0xFFBFC2D1);
+  static const _primary = Color(0xFF5E78F7);
+  static const _track = Color(0xFF2E3868);
+  static const _subtleText = Colors.white;
   static const _onPrimary = Colors.white;
 
   static ThemeData get theme {
     final base = ThemeData.dark(useMaterial3: true);
 
     return base.copyWith(
-      // Cores principais
       scaffoldBackgroundColor: _background,
       colorScheme: const ColorScheme(
         brightness: Brightness.dark,
