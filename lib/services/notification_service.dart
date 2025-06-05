@@ -7,12 +7,7 @@ import 'package:local_notifier/local_notifier.dart';
 class NotificationService implements INotificationService {
   @override
   Future<void> initialize() async {
-    if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
-      await localNotifier.setup(
-        appName: 'Flow Focus',
-        shortcutPolicy: ShortcutPolicy.requireCreate,
-      );
-    }
+    await localNotifier.setup(appName: 'Flow Focus');
   }
 
   @override
@@ -24,6 +19,7 @@ class NotificationService implements INotificationService {
     LocalNotification notification = LocalNotification(
       title: title,
       body: body,
+      silent: false,
     );
 
     if (actions.isNotEmpty) {
