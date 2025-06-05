@@ -1,111 +1,89 @@
-name: Release Linux (Flutter)
+name: Build Linux (amd64 and arm64)
 
 on:
   push:
-    branches: [release] # Adjust if you use a different release branch
-
-permissions:
-  contents: write # Necessary to create/update Releases
+    branches: [main, release]
 
 env:
   APP_NAME: flow_focus
-  FLUTTER_VERSION: "3.32.2" # Specify a precise Flutter version for consistency
+  FLUTTER_VERSION: 3.32.1
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        arch: [x64, arm64] # Changed aarch64 to arm64 for consistency with Flutter's target-platform naming
+        arch: [amd64, arm64]
 
     steps:
-      - name: Checkout repository
+      # 1. Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up QEMU (for ARM64 build on x64 runner)
-        if: matrix.arch == 'arm64'
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: linux/arm64
-
-      - name: Install Linux build dependencies
+      # 2. Install dependencies
+      - name: Install dependencies
         run: |
-          sudo apt-get update -q
-          sudo apt-get install -y \
-            clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev \
-            libnotify-dev libdbus-1-dev
+          sudo apt update
+          sudo apt install -y clang cmake ninja-build pkg-config libgtk-3-dev \
+            gcc-aarch64-linux-gnu g++-aarch64-linux-gnu liblzma-dev
 
-      - name: Set up Flutter SDK
+      # 3. Set up Flutter
+      - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: "stable" # Or specify 'beta', 'dev'
-          flutter-version: ${{ env.FLUTTER_VERSION }}
+          flutter-version: stable
+          channel: stable
           cache: true
           cache-key: "flutter-${{ runner.os }}-${{ env.FLUTTER_VERSION }}-${{ hashFiles('**/pubspec.lock') }}" # More specific cache key
 
-      - name: Configure Flutter for Linux and get dependencies
+      # 4. Enable desktop target
+      - run: flutter config --enable-linux-desktop
+
+      # 5. Get packages
+      - run: flutter pub get
+
+      # 6. Build for amd64 (native)
+      - name: Build for amd64
+        if: matrix.arch == 'amd64'
         run: |
-          flutter config --enable-linux-desktop
-          flutter pub get
+          flutter build linux --release
+          mkdir -p dist/amd64
+          cp -r build/linux/x64/release/bundle/* dist/amd64/
 
-      - name: Build Flutter Linux for x64 (native)
-        if: matrix.arch == 'x64'
-        run: flutter build linux --release --target-platform=linux-x64
-
-      - name: Build Flutter Linux for arm64 (cross-compile using Docker)
+      # 7. Cross-compile for arm64
+      - name: Cross-compile for arm64
         if: matrix.arch == 'arm64'
         run: |
-          docker run --rm --platform linux/arm64 \
-            -v "${PWD}:/app" -w /app \
-            ghcr.io/cirruslabs/flutter:${{ env.FLUTTER_VERSION }} \
-            bash -c "sudo apt-get update -q && sudo apt-get install -y cmake clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libnotify-dev libdbus-1-dev && flutter config --enable-linux-desktop && flutter pub get && flutter build linux --release --target-platform=linux-arm64"
+          flutter build bundle
+          mkdir -p build/linux/arm64/release/bundle
 
-      - name: Determine Build Output Directory
-        id: build_paths
+          # Run cmake manually with toolchain
+          cd linux
+          cmake -B build-arm64 \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_SYSTEM_NAME=Linux \
+            -DCMAKE_SYSTEM_PROCESSOR=aarch64 \
+            -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc \
+            -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ \
+            -DFLUTTER_TARGET_PLATFORM=linux-arm64 \
+            -GNinja
+
+          cmake --build build-arm64
+
+          # Copy binaries + flutter_assets to bundle
+          mkdir -p dist/arm64
+          cp -r ../build/flutter_assets dist/arm64/
+          cp build-arm64/${{ env.APP_NAME }} dist/arm64/
+
+      # 8. Package output
+      - name: Package ${{ matrix.arch }}
         run: |
-          if [ "${{ matrix.arch }}" == "x64" ]; then
-            echo "output_dir=build/linux/x64/release/bundle" >> $GITHUB_OUTPUT
-            echo "archive_name=${{ env.APP_NAME }}-linux-x64.tar.gz" >> $GITHUB_OUTPUT
-          elif [ "${{ matrix.arch }}" == "arm64" ]; then
-            echo "output_dir=build/linux/arm64/release/bundle" >> $GITHUB_OUTPUT
-            echo "archive_name=${{ env.APP_NAME }}-linux-arm64.tar.gz" >> $GITHUB_OUTPUT
-          fi
+          cd dist/${{ matrix.arch }}
+          tar -czvf ../../${{ env.APP_NAME }}-${{ matrix.arch }}.tar.gz .
 
-      - name: Package release binary
-        run: |
-          tar -czf "${{ steps.build_paths.outputs.archive_name }}" -C "${{ steps.build_paths.outputs.output_dir }}/.." bundle
-          # The -C changes directory to the parent of "bundle" before archiving, so the tarball contains "bundle/"
-          # The archive will be created in GITHUB_WORKSPACE by default.
-
-      - name: Upload artifact
+      # 9. Upload artifact
+      - name: Upload
         uses: actions/upload-artifact@v4
         with:
-          name: linux-binary-${{ matrix.arch }}
-          path: ${{ steps.build_paths.outputs.archive_name }}
-          retention-days: 3
-
-  publish:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download x64 binary artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: linux-binary-x64
-          path: . # Download to current directory
-
-      - name: Download arm64 binary artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: linux-binary-aarch64 # Keep original artifact name if you prefer, or change to arm64
-          path: . # Download to current directory
-
-      - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ github.run_number }} # Using v prefix for tags is common
-          name: "Release v${{ github.run_number }}"
-          generate_release_notes: true
-          files: |
-            ${{ env.APP_NAME }}-linux-x64.tar.gz
-            ${{ env.APP_NAME }}-linux-aarch64.tar.gz # Adjusted to match typical arm64 artifact name if you change upload name
+          name: ${{ env.APP_NAME }}-${{ matrix.arch }}
+          path: ${{ env.APP_NAME }}-${{ matrix.arch }}.tar.gz
