@@ -34,14 +34,7 @@ jobs:
         run: |
           sudo apt-get install -y \
             gcc-aarch64-linux-gnu \
-            g++-aarch64-linux-gnu \
-            libgtk-3-dev:arm64 \
-            libnotify-dev:arm64 \
-            libdbus-1-dev:arm64
-          
-          # Add arm64 architecture
-          sudo dpkg --add-architecture arm64
-          sudo apt-get update
+            g++-aarch64-linux-gnu
 
       # 3. Instalar/Cache do SDK Flutter
       - uses: subosito/flutter-action@v2
@@ -61,13 +54,7 @@ jobs:
       # 4.2. Build for aarch64
       - name: Build for aarch64
         if: matrix.arch == 'aarch64'
-        run: |
-          export CC=aarch64-linux-gnu-gcc
-          export CXX=aarch64-linux-gnu-g++
-          export AR=aarch64-linux-gnu-ar
-          export STRIP=aarch64-linux-gnu-strip
-          export PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig
-          flutter build linux --release --target-platform linux-arm64
+        run: flutter build linux --release --target-platform linux-arm64
 
       # 5. Empacotar executável em .tar.gz
       - name: Package x64 binary
