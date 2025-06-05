@@ -1,4 +1,5 @@
-name: Build Linux (amd64 and arm64)
+name: Flow Focus
+description: A productivity app to help you focus on your tasks.
 
 on:
   push:
