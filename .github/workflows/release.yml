@@ -9,7 +9,7 @@ permissions:
 
 env:
   APP_NAME: flow_focus
-  FLUTTER_VERSION: "3.22.2" # Specify a precise Flutter version for consistency
+  FLUTTER_VERSION: "3.32.2" # Specify a precise Flutter version for consistency
 
 jobs:
   build:
