@@ -58,7 +58,7 @@ jobs:
           docker run --rm --platform linux/arm64 \
             -v "${PWD}:/app" -w /app \
             ghcr.io/cirruslabs/flutter:${{ env.FLUTTER_VERSION }} \
-            bash -c "apt install cmake && flutter config --enable-linux-desktop && flutter pub get && flutter build linux --release --target-platform=linux-arm64"
+            bash -c "sudo apt-get update -q && sudo apt-get install -y cmake && flutter config --enable-linux-desktop && flutter pub get && flutter build linux --release --target-platform=linux-arm64"
 
       - name: Determine Build Output Directory
         id: build_paths
