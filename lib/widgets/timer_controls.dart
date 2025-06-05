@@ -16,7 +16,7 @@ class TimeControls extends StatelessWidget {
     required this.onSkip,
   });
 
-  final double _iconSize = 32;
+  final double _iconSize = 38;
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +24,13 @@ class TimeControls extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         isRunning
-            ? IconButton.filled(
+            ? IconButton.filledTonal(
                 onPressed: onPause,
                 icon: Icon(Icons.pause),
                 iconSize: _iconSize,
                 tooltip: 'Pause',
               )
-            : IconButton.filled(
+            : IconButton.filledTonal(
                 onPressed: onStart,
                 icon: Icon(Icons.play_arrow),
                 iconSize: _iconSize,
@@ -39,7 +39,7 @@ class TimeControls extends StatelessWidget {
 
         const SizedBox(width: 12),
 
-        IconButton.filled(
+        IconButton.filledTonal(
           onPressed: isRunning ? null : onSkip,
           icon: Icon(Icons.skip_next),
           iconSize: _iconSize,
@@ -48,7 +48,7 @@ class TimeControls extends StatelessWidget {
 
         const SizedBox(width: 12),
 
-        IconButton.filled(
+        IconButton.filledTonal(
           onPressed: onRestart,
           icon: Icon(Icons.restart_alt),
           iconSize: _iconSize,
