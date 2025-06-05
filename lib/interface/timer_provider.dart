@@ -83,8 +83,4 @@ abstract class ITimerProvider {
   /// to the full duration for the current phase. The phase type
   /// (work/break) remains unchanged.
   void onRestartTimer();
-
-  int get completedSessions;
-
-  int get totalOfSessions;
 }

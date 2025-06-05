@@ -20,7 +20,7 @@ class TimerModelProvider extends ChangeNotifier implements ITimerProvider {
   Duration _totalDuration = const Duration(minutes: 25);
   bool _isRunning = false;
   PomoStepType _currentStep = PomoStepType.work;
-  int _completedSessions = 1;
+  int _completedSessions = 0;
 
   @override
   Duration get currentDuration => _currentDuration;
@@ -33,12 +33,6 @@ class TimerModelProvider extends ChangeNotifier implements ITimerProvider {
 
   @override
   PomoStepType get currentStep => _currentStep;
-
-  @override
-  int get completedSessions => _completedSessions;
-
-  @override
-  int get totalOfSessions => _configModelProvider.sessionUntilLongBreak;
 
   @override
   double get progress =>

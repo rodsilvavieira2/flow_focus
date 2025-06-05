@@ -50,13 +50,6 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SesssionsCounter(
-                  sessionsCount: provider.totalOfSessions,
-                  completedSessions: provider.completedSessions,
-                ),
-
-                const SizedBox(height: 22),
-
                 StepType(step: provider.currentStep),
 
                 const SizedBox(height: 22),
