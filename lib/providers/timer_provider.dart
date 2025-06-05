@@ -20,7 +20,7 @@ class TimerModelProvider extends ChangeNotifier implements ITimerProvider {
   Duration _totalDuration = const Duration(minutes: 25);
   bool _isRunning = false;
   PomoStepType _currentStep = PomoStepType.work;
-  int _completedSessions = 0;
+  int _completedSessions = 1;
 
   @override
   Duration get currentDuration => _currentDuration;
@@ -33,6 +33,12 @@ class TimerModelProvider extends ChangeNotifier implements ITimerProvider {
 
   @override
   PomoStepType get currentStep => _currentStep;
+
+  @override
+  int get completedSessions => _completedSessions;
+
+  @override
+  int get totalOfSessions => _configModelProvider.sessionUntilLongBreak;
 
   @override
   double get progress =>
@@ -104,11 +110,6 @@ class TimerModelProvider extends ChangeNotifier implements ITimerProvider {
           : Duration(minutes: _configModelProvider.shortBreakTime);
 
       _notificationService.showBreakNotification();
-
-      _notificationService.showPomodoroCompleteNotification(
-        completedPomodoros: _completedSessions,
-        onAction: onStartTimer,
-      );
     } else {
       _currentStep = PomoStepType.work;
       _totalDuration = Duration(minutes: _configModelProvider.workTime);

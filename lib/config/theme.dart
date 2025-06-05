@@ -5,27 +5,28 @@ class FocusFlowDarkTheme {
   static const _background = Color(0xFF101323);
   static const _surface = Color(0xFF1C223C);
   static const _onSurface = Color(0xFFBFC2D1);
-  static const _primary = Color(0xFF5E78F7);
+  static const _primary = Color(0xFF4F46E5);
   static const _track = Color(0xFF2E3868);
   static const _subtleText = Colors.white;
   static const _onPrimary = Colors.white;
 
   static ThemeData get theme {
     final base = ThemeData.dark(useMaterial3: true);
+    final colorScheme = const ColorScheme(
+      brightness: Brightness.dark,
+      primary: _primary,
+      onPrimary: _onPrimary,
+      secondary: _surface,
+      onSecondary: _onPrimary,
+      surface: _surface,
+      onSurface: _onSurface,
+      error: Colors.redAccent,
+      onError: _onPrimary,
+    );
 
     return base.copyWith(
       scaffoldBackgroundColor: _background,
-      colorScheme: const ColorScheme(
-        brightness: Brightness.dark,
-        primary: _primary,
-        onPrimary: _onPrimary,
-        secondary: _surface,
-        onSecondary: _onPrimary,
-        surface: _surface,
-        onSurface: _onSurface,
-        error: Colors.redAccent,
-        onError: _onPrimary,
-      ),
+      colorScheme: colorScheme,
 
       textTheme: GoogleFonts.interTextTheme(base.textTheme).copyWith(
         bodyMedium: const TextStyle(color: _subtleText),
@@ -46,9 +47,9 @@ class FocusFlowDarkTheme {
         ),
       ),
 
-      progressIndicatorTheme: const ProgressIndicatorThemeData(
+      progressIndicatorTheme: ProgressIndicatorThemeData(
         color: _primary,
-        linearTrackColor: _track,
+        linearTrackColor: colorScheme.surface,
         linearMinHeight: 6,
       ),
 

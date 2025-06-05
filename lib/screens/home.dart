@@ -2,6 +2,7 @@ import 'package:flow_focus/providers/theme_provider.dart';
 import 'package:flow_focus/providers/timer_provider.dart';
 import 'package:flow_focus/screens/settings.dart';
 import 'package:flow_focus/widgets/progesss_bar.dart';
+import 'package:flow_focus/widgets/sesssions_counter.dart';
 import 'package:flow_focus/widgets/step_type.dart';
 import 'package:flow_focus/widgets/theme_switch.dart';
 import 'package:flow_focus/widgets/timer.dart';
@@ -49,10 +50,21 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SesssionsCounter(
+                  sessionsCount: provider.totalOfSessions,
+                  completedSessions: provider.completedSessions,
+                ),
+
+                const SizedBox(height: 22),
+
                 StepType(step: provider.currentStep),
+
                 const SizedBox(height: 22),
+
                 Timer(duration: provider.currentDuration),
+
                 const SizedBox(height: 22),
+
                 TimeControls(
                   onPause: provider.pauseTimer,
                   onRestart: provider.onRestartTimer,
@@ -60,7 +72,9 @@ class HomeScreen extends StatelessWidget {
                   onSkip: provider.onCompleteStep,
                   isRunning: provider.isRunning,
                 ),
+
                 const SizedBox(height: 22),
+
                 ProgressBar(percent: provider.progress),
               ],
             ),
