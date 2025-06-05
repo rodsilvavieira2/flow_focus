@@ -23,10 +23,9 @@ class ProgressBar extends StatelessWidget {
             duration: Duration(milliseconds: 300),
             tween: Tween<double>(begin: 0, end: percent),
             builder: (context, value, child) {
-              return LinearProgressIndicator(
-                value: value,
-                minHeight: 16,
+              return ClipRRect(
                 borderRadius: BorderRadius.circular(8),
+                child: LinearProgressIndicator(value: value, minHeight: 16),
               );
             },
           ),
