@@ -55,6 +55,13 @@ jobs:
       - name: Cross-compile for arm64
         if: matrix.arch == 'arm64'
         run: |
+          # Generate flutter ephemeral files first
+          cd linux
+          mkdir -p flutter/ephemeral
+          flutter generate
+          cd ..
+
+          # Build flutter bundle
           flutter build bundle
           mkdir -p build/linux/arm64/release/bundle
 
@@ -67,6 +74,7 @@ jobs:
             -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc \
             -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ \
             -DFLUTTER_TARGET_PLATFORM=linux-arm64 \
+            -DFLUTTER_EPHEMERAL_DIR=flutter/ephemeral \
             -GNinja
 
           cmake --build build-arm64
