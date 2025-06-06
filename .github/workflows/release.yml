@@ -125,6 +125,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y clang cmake libgtk-3-dev ninja-build libayatana-appindicator3-dev libnotify-dev wget file
+          # Install FUSE for AppImage support
+          sudo apt-get install -y fuse3 libfuse2
+          # Set up FUSE permissions
+          sudo modprobe fuse || echo "FUSE module not available, continuing with extraction method"
+          sudo chmod 666 /dev/fuse || echo "FUSE device not available, continuing with extraction method"
 
       - uses: subosito/flutter-action@v2
         with:

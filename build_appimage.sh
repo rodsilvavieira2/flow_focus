@@ -79,7 +79,23 @@ download_appimagetool() {
             -O "$appimagetool_path"
         
         chmod +x "$appimagetool_path"
-        print_success "appimagetool downloaded"
+        
+        # Test if appimagetool can run (FUSE available)
+        if ! "$appimagetool_path" --version &>/dev/null; then
+            print_warning "FUSE not available, extracting appimagetool..."
+            # Extract the AppImage to get the binary
+            cd "$BUILD_DIR"
+            "$appimagetool_path" --appimage-extract &>/dev/null || {
+                print_error "Failed to extract appimagetool"
+                exit 1
+            }
+            # Use the extracted binary
+            mv appimagetool squashfs-root/AppRun
+            chmod +x squashfs-root/AppRun
+            print_success "appimagetool extracted successfully"
+        else
+            print_success "appimagetool downloaded and FUSE available"
+        fi
     else
         print_status "appimagetool already available"
     fi
@@ -249,8 +265,20 @@ create_appimage() {
     
     cd "$BUILD_DIR"
     
+    # Determine which appimagetool to use
+    local appimagetool_cmd
+    if [ -f "squashfs-root/AppRun" ]; then
+        # Use extracted version
+        appimagetool_cmd="./squashfs-root/AppRun"
+        print_status "Using extracted appimagetool (FUSE workaround)"
+    else
+        # Use regular AppImage
+        appimagetool_cmd="./appimagetool"
+        print_status "Using appimagetool AppImage"
+    fi
+    
     # Run appimagetool
-    ARCH=x86_64 ./appimagetool AppDir "$output_name"
+    ARCH=x86_64 "$appimagetool_cmd" AppDir "$output_name"
     
     if [ -f "$output_name" ]; then
         # Move to project root
