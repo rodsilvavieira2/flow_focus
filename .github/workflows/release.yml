@@ -9,6 +9,7 @@ on:
 
 env:
   FLUTTER_VERSION: "3.24.5"
+  RUST_VERSION: "1.84.1"
 
 jobs:
   build:
