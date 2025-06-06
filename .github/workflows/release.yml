@@ -50,15 +50,12 @@ jobs:
           override: ${{ env.RUST_VERSION }}
 
       - name: Check rust-toolchain.toml
-        working-directory: app
         run: rustup show
 
       - name: Dependencies
-        working-directory: app
         run: flutter pub get
 
       - name: Compile linux
-        working-directory: app
         run: flutter build linux
 
       - name: Create tar.gz archive
@@ -87,11 +84,9 @@ jobs:
           sudo apt-get install -y clang cmake libgtk-3-dev ninja-build libayatana-appindicator3-dev libnotify-dev
 
       - name: Dependencies
-        working-directory: app
         run: flutter pub get
 
       - name: Compile linux
-        working-directory: app
         run: flutter build linux
 
       - name: Create tar.gz archive
