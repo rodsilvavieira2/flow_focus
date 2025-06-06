@@ -58,3 +58,7 @@ RUN ARCH=$(dpkg --print-architecture) && \
     BUILD_PATH="build/linux/x64/release/bundle"; \
     fi && \
     tar -czf /app/build.tar.gz -C $BUILD_PATH .
+
+# Final stage to output the build artifact
+FROM scratch AS export-stage
+COPY --from=builder /app/build.tar.gz /build.tar.gz

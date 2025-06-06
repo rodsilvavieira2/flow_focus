@@ -84,14 +84,29 @@ jobs:
           docker buildx build \
             --platform linux/arm64 \
             --build-arg FLUTTER_VERSION=${{ env.FLUTTER_VERSION }} \
+            --target export-stage \
             --output type=local,dest=./docker-output \
             -f Dockerfile .
 
       - name: Extract build artifact
         run: |
-          cd docker-output
-          tar -xzf build.tar.gz
-          tar -czvf ../result.tar.gz *
+          # Check what files are in docker-output
+          ls -la docker-output/
+          # The build.tar.gz should be in the docker-output directory
+          if [ -f docker-output/build.tar.gz ]; then
+            # Extract the contents of build.tar.gz and repackage as result.tar.gz
+            mkdir -p temp-extract
+            cd temp-extract
+            tar -xzf ../docker-output/build.tar.gz
+            tar -czvf ../result.tar.gz *
+            cd ..
+            rm -rf temp-extract
+          else
+            echo "build.tar.gz not found in docker-output"
+            echo "Contents of docker-output:"
+            find docker-output -type f
+            exit 1
+          fi
 
       - name: Upload tar.gz archive
         uses: actions/upload-artifact@v4
@@ -164,12 +179,12 @@ jobs:
             - **Linux ARM64**: Download the ARM64 tar.gz file below
 
             ### Installation
-            
+
             #### AppImage (Easiest)
             1. Download the AppImage file
             2. Make it executable: `chmod +x flow-focus-*.AppImage`
             3. Run directly: `./flow-focus-*.AppImage`
-            
+
             #### Tar.gz Archive
             1. Download the appropriate file for your architecture
             2. Extract: `tar -xzf flow-focus-*.tar.gz`
