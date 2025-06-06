@@ -1,5 +1,4 @@
 name: Flow Focus
-description: A productivity app to help you focus on your tasks.
 
 on:
   push:
@@ -7,7 +6,7 @@ on:
 
 env:
   APP_NAME: flow_focus
-  FLUTTER_VERSION: "3.32.1" # Specific version instead of 'stable'
+  FLUTTER_VERSION: 3.32.1
 
 jobs:
   build:
@@ -26,16 +25,16 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y clang cmake ninja-build pkg-config libgtk-3-dev \
-            gcc-aarch64-linux-gnu g++-aarch64-linux-gnu liblzma-dev libnotify-dev
+            gcc-aarch64-linux-gnu g++-aarch64-linux-gnu liblzma-dev
 
       # 3. Set up Flutter
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: "stable"
+          flutter-version: stable
+          channel: stable
           cache: true
-          cache-key: "flutter-:os:-${{ env.FLUTTER_VERSION }}"
+          cache-key: "flutter-${{ runner.os }}-${{ env.FLUTTER_VERSION }}-${{ hashFiles('**/pubspec.lock') }}" # More specific cache key
 
       # 4. Enable desktop target
       - run: flutter config --enable-linux-desktop
@@ -55,34 +54,9 @@ jobs:
       - name: Cross-compile for arm64
         if: matrix.arch == 'arm64'
         run: |
-          # Generate flutter ephemeral files first
-          cd linux
-          mkdir -p flutter/ephemeral
-          flutter generate
-          cd ..
-
-          # Build flutter bundle
-          flutter build bundle
-          mkdir -p build/linux/arm64/release/bundle
-
-          # Run cmake manually with toolchain
-          cd linux
-          cmake -B build-arm64 \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_SYSTEM_NAME=Linux \
-            -DCMAKE_SYSTEM_PROCESSOR=aarch64 \
-            -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc \
-            -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ \
-            -DFLUTTER_TARGET_PLATFORM=linux-arm64 \
-            -DFLUTTER_EPHEMERAL_DIR=flutter/ephemeral \
-            -GNinja
-
-          cmake --build build-arm64
-
-          # Copy binaries + flutter_assets to bundle
+          flutter build linux --release
           mkdir -p dist/arm64
-          cp -r ../build/flutter_assets dist/arm64/
-          cp build-arm64/${{ env.APP_NAME }} dist/arm64/
+          cp -r build/linux/aarch64/release/bundle/* dist/arm64/
 
       # 8. Package output
       - name: Package ${{ matrix.arch }}
