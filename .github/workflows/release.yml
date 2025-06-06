@@ -56,7 +56,7 @@ jobs:
         run: |
           flutter build linux --release
           mkdir -p dist/arm64
-          cp -r build/linux/aarch64/release/bundle/* dist/arm64/
+          cp -r build/linux/x64/release/bundle/* dist/arm64/
 
       # 8. Package output
       - name: Package ${{ matrix.arch }}
