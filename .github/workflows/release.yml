@@ -70,3 +70,37 @@ jobs:
         with:
           name: ${{ env.APP_NAME }}-${{ matrix.arch }}
           path: ${{ env.APP_NAME }}-${{ matrix.arch }}.tar.gz
+
+  release:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout code
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Download all artifacts
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      # 3. Move artifacts to root
+      - name: Prepare artifacts
+        run: |
+          mv artifacts/${{ env.APP_NAME }}-amd64/${{ env.APP_NAME }}-amd64.tar.gz .
+          mv artifacts/${{ env.APP_NAME }}-arm64/${{ env.APP_NAME }}-arm64.tar.gz .
+
+      # 4. Create release
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ github.run_number }}
+          name: Release v${{ github.run_number }}
+          generate_release_notes: true
+          files: |
+            ${{ env.APP_NAME }}-amd64.tar.gz
+            ${{ env.APP_NAME }}-arm64.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
