@@ -1,0 +1,37 @@
+# Git
+.git
+.gitignore
+
+# Flutter/Dart generated files
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+README.md
+screenshots/
+
+# GitHub workflows (not needed in container)
+.github/
+
+# Other
+release-example.yml
+repo/
+test/
+
+# Docker
+Dockerfile
+.dockerignore
