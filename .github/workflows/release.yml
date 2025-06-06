@@ -60,14 +60,14 @@ jobs:
 
       - name: Create tar.gz archive
         run: |
-          cd app/build/linux/x64/release/bundle
+          cd build/linux/x64/release/bundle
           tar -czvf ../../../../../result.tar.gz *
 
       - name: Upload tar.gz archive
         uses: actions/upload-artifact@v4
         with:
           name: tar-gz-x86-64-result
-          path: ./app/*.tar.gz
+          path: ./*.tar.gz
 
   # Manage the Flutter version on the self-hosted runner manually!
   # Flutter currently doesn't provide Linux ARM64 binaries.
@@ -91,14 +91,14 @@ jobs:
 
       - name: Create tar.gz archive
         run: |
-          cd app/build/linux/arm64/release/bundle
+          cd build/linux/arm64/release/bundle
           tar -czvf ../../../../../result.tar.gz *
 
       - name: Upload tar.gz archive
         uses: actions/upload-artifact@v4
         with:
           name: tar-gz-arm-64-result
-          path: ./app/*.tar.gz
+          path: ./*.tar.gz
 
   release:
     needs:
