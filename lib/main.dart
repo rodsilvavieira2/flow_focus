@@ -12,6 +12,7 @@ import 'package:window_manager/window_manager.dart';
 
 final NotificationService notificationService = NotificationService();
 final TrayService trayService = TrayService();
+final settingsService = SettingsService();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,6 @@ void main() async {
   await windowManager.ensureInitialized();
 
   await notificationService.initialize();
-  final settingsService = SettingsService();
 
   WindowOptions windowOptions = WindowOptions(
     size: const Size(800, 600),
