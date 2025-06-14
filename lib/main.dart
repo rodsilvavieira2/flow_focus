@@ -9,6 +9,8 @@ import 'package:flow_focus/services/tray_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:system_tray/system_tray.dart';
+import 'dart:io';
 
 final NotificationService notificationService = NotificationService();
 final TrayService trayService = TrayService();
@@ -17,6 +19,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await windowManager.ensureInitialized();
+  await windowManager.setPreventClose(true);
 
   await notificationService.initialize();
   final settingsService = SettingsService();
@@ -63,13 +66,15 @@ void main() async {
           create: (_) => ThemeModelProvider(settingsService),
         ),
       ],
-      child: const MyApp(),
+      child: MyApp(notificationService: notificationService),
     ),
   );
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final NotificationService notificationService;
+
+  const MyApp({super.key, required this.notificationService});
 
   @override
   MyAppState createState() {
@@ -78,6 +83,68 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> with WindowListener {
+  final SystemTray _tray = SystemTray();
+  final Menu _menu = Menu();
+
+  @override
+  void initState() {
+    super.initState();
+    windowManager.addListener(this);
+    _initTray();
+  }
+
+  Future<void> _initTray() async {
+    final String iconPath = Platform.isWindows
+        ? 'assets/icons/app_icon.png'
+        : 'assets/icons/app_icon.png';
+
+    await _tray.initSystemTray(
+      title: 'Flow Focus',
+      iconPath: iconPath,
+    );
+
+    await _menu.buildFrom([
+      MenuItemLabel(
+          label: 'Show',
+          onClicked: (menuItem) async {
+            await windowManager.show();
+            await windowManager.focus();
+          }),
+      MenuItemLabel(
+          label: 'Exit',
+          onClicked: (menuItem) async {
+            await windowManager.destroy();
+          }),
+    ]);
+
+    await _tray.setContextMenu(_menu);
+
+    _tray.registerSystemTrayEventHandler((eventName) async {
+      if (eventName == kSystemTrayEventClick) {
+        await windowManager.show();
+        await windowManager.focus();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    windowManager.removeListener(this);
+    _tray.destroy();
+    super.dispose();
+  }
+
+  @override
+  void onWindowClose() async {
+    bool preventClose = await windowManager.isPreventClose();
+    if (preventClose) {
+      await windowManager.hide();
+      await widget.notificationService.showSystemTrayNotification(
+        title: 'Flow Focus',
+        body: 'Running in system tray',
+      );
+    }
+  }
   @override
   void initState() {
     trayService.initialize(
