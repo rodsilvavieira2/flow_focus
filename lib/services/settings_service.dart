@@ -1,5 +1,5 @@
 import 'package:flow_focus/interface/settings_service.dart';
-import 'package:flutter/src/material/app.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsService implements ISettingsService {
@@ -85,7 +85,7 @@ class SettingsService implements ISettingsService {
       final themeModeString = prefs.getString(_settingsVersionKey);
 
       if (themeModeString == null) {
-        return ThemeMode.system; // Default to system theme if not set
+        return ThemeMode.system;
       }
 
       switch (themeModeString) {
