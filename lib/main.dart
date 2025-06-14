@@ -35,17 +35,6 @@ void main() async {
     await windowManager.focus();
   });
 
-  await trayService.initialize(
-    onShow: () async {
-      await windowManager.show();
-      await windowManager.focus();
-    },
-    onQuit: () async {
-      await trayService.destroy();
-      await windowManager.destroy();
-    },
-  );
-
   await windowManager.setPreventClose(true);
 
   runApp(
@@ -91,7 +80,19 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> with WindowListener {
   @override
   void initState() {
+    trayService.initialize(
+      onShow: () async {
+        await windowManager.show();
+        await windowManager.focus();
+      },
+      onQuit: () async {
+        await trayService.destroy();
+        await windowManager.destroy();
+      },
+    );
+
     super.initState();
+
     windowManager.addListener(this);
   }
 

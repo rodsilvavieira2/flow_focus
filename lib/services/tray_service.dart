@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flow_focus/interface/tray_service.dart';
 import 'package:flutter/material.dart';
 import 'package:tray_manager/tray_manager.dart';
@@ -17,9 +15,8 @@ class TrayService with TrayListener implements ITrayService {
     _onQuit = onQuit;
     trayManager.addListener(this);
 
-    final String iconPath = Platform.isWindows
-        ? 'assets/icons/app_icon.ico'
-        : 'assets/icons/app_icon.png';
+    final String iconPath = 'assets/icons/app_icon.png';
+
     await trayManager.setIcon(iconPath);
     await trayManager.setContextMenu(
       Menu(
