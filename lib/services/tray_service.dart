@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flow_focus/interface/tray_service.dart';
+import 'package:flutter/material.dart';
 import 'package:tray_manager/tray_manager.dart';
 
 class TrayService with TrayListener implements ITrayService {
@@ -8,7 +9,10 @@ class TrayService with TrayListener implements ITrayService {
   VoidCallback? _onQuit;
 
   @override
-  Future<void> initialize({required VoidCallback onShow, required VoidCallback onQuit}) async {
+  Future<void> initialize({
+    required VoidCallback onShow,
+    required VoidCallback onQuit,
+  }) async {
     _onShow = onShow;
     _onQuit = onQuit;
     trayManager.addListener(this);
@@ -18,11 +22,13 @@ class TrayService with TrayListener implements ITrayService {
         : 'assets/icons/app_icon.png';
     await trayManager.setIcon(iconPath);
     await trayManager.setContextMenu(
-      Menu(items: [
-        MenuItem(key: 'show', label: 'Show'),
-        MenuItem.separator(),
-        MenuItem(key: 'quit', label: 'Quit'),
-      ]),
+      Menu(
+        items: [
+          MenuItem(key: 'show', label: 'Show'),
+          MenuItem.separator(),
+          MenuItem(key: 'quit', label: 'Quit'),
+        ],
+      ),
     );
   }
 
