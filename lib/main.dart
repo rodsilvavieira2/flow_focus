@@ -5,13 +5,11 @@ import 'package:flow_focus/providers/timer_provider.dart';
 import 'package:flow_focus/screens/home.dart';
 import 'package:flow_focus/services/notification_service.dart';
 import 'package:flow_focus/services/settings_service.dart';
-import 'package:flow_focus/services/tray_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
 final NotificationService notificationService = NotificationService();
-final TrayService trayService = TrayService();
 final settingsService = SettingsService();
 
 void main() async {
@@ -34,8 +32,6 @@ void main() async {
     await windowManager.show();
     await windowManager.focus();
   });
-
-  await windowManager.setPreventClose(true);
 
   runApp(
     MultiProvider(
@@ -77,38 +73,10 @@ class MyApp extends StatefulWidget {
   }
 }
 
-class MyAppState extends State<MyApp> with WindowListener {
+class MyAppState extends State<MyApp> {
   @override
   void initState() {
-    trayService.initialize(
-      onShow: () async {
-        await windowManager.show();
-        await windowManager.focus();
-      },
-      onQuit: () async {
-        await trayService.destroy();
-        await windowManager.destroy();
-      },
-    );
-
     super.initState();
-
-    windowManager.addListener(this);
-  }
-
-  @override
-  void dispose() {
-    windowManager.removeListener(this);
-    super.dispose();
-  }
-
-  @override
-  void onWindowClose() async {
-    await windowManager.hide();
-    await notificationService.showSystemTrayNotification(
-      title: 'Flow Focus',
-      body: 'Still running in the background.',
-    );
   }
 
   @override
