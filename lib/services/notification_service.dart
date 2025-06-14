@@ -1,10 +1,16 @@
 import 'dart:io';
 
+import 'package:flow_focus/interface/audio_service.dart';
 import 'package:flow_focus/interface/notification_service.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:local_notifier/local_notifier.dart';
 
 class NotificationService implements INotificationService {
+  final IAudioService _audioService;
+  final alertFile = "sounds/alert.wav";
+
+  NotificationService(this._audioService);
+
   @override
   Future<void> initialize() async {
     await localNotifier.setup(appName: 'Flow Focus');
@@ -44,6 +50,8 @@ class NotificationService implements INotificationService {
     }
 
     await notification.show();
+
+    await _audioService.playSound(alertFile);
   }
 
   @override
@@ -65,6 +73,8 @@ class NotificationService implements INotificationService {
       body: 'Time for a well-deserved break. Step away from your work.',
       actions: actions,
     );
+
+    await _audioService.playSound(alertFile);
   }
 
   @override
@@ -86,6 +96,8 @@ class NotificationService implements INotificationService {
       body: 'Break is over. Time to get back to focused work.',
       actions: actions,
     );
+
+    await _audioService.playSound(alertFile);
   }
 
   @override
@@ -107,6 +119,8 @@ class NotificationService implements INotificationService {
       body: 'Great work! You have completed your focus session.',
       actions: actions,
     );
+
+    await _audioService.playSound(alertFile);
   }
 
   @override
@@ -132,6 +146,8 @@ class NotificationService implements INotificationService {
           'You completed $completedPomodoros pomodoro${completedPomodoros > 1 ? 's' : ''}.',
       actions: actions,
     );
+
+    await _audioService.playSound(alertFile);
   }
 
   @override
@@ -147,6 +163,8 @@ class NotificationService implements INotificationService {
       );
 
       await notification.show();
+
+      await _audioService.playSound(alertFile);
     }
   }
 

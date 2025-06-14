@@ -3,13 +3,17 @@ import 'package:flow_focus/providers/config_provider.dart';
 import 'package:flow_focus/providers/theme_provider.dart';
 import 'package:flow_focus/providers/timer_provider.dart';
 import 'package:flow_focus/screens/home.dart';
+import 'package:flow_focus/services/audio_service.dart';
 import 'package:flow_focus/services/notification_service.dart';
 import 'package:flow_focus/services/settings_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
-final NotificationService notificationService = NotificationService();
+final AudioService audioService = AudioService();
+final NotificationService notificationService = NotificationService(
+  audioService,
+);
 final settingsService = SettingsService();
 
 void main() async {
