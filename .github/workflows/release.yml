@@ -1,87 +1,252 @@
-name: Build Linux (amd64 and arm64)
+name: Release Focus Flow
 
 on:
   push:
-    branches: [main, release]
+    branches:
+      - release
+
+  workflow_dispatch:
 
 env:
-  APP_NAME: flow_focus
+  FLUTTER_VERSION: "3.32.1"
+  RUST_VERSION: "1.84.1"
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        arch: [amd64, arm64]
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
 
     steps:
-      # 1. Checkout code
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # 2. Install dependencies
+      - name: Get version from pubspec.yaml
+        id: get_version
+        run: |
+          VERSION=$(sed -n 's/^version: \([0-9]*\.[0-9]*\.[0-9]*\).*/\1/p' pubspec.yaml)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+  build_tar_x86_64:
+    needs: build
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
       - name: Install dependencies
         run: |
-          sudo apt update
-          sudo apt install -y clang cmake ninja-build pkg-config libgtk-3-dev \
-            gcc-aarch64-linux-gnu g++-aarch64-linux-gnu liblzma-dev
+          sudo apt-get update
+          sudo apt-get install -y clang cmake libgtk-3-dev ninja-build libayatana-appindicator3-dev libnotify-dev
 
-      # 3. Set up Flutter
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2
         with:
-          flutter-version: stable
-          channel: stable
-          cache: true
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
 
-      # 4. Enable desktop target
-      - run: flutter config --enable-linux-desktop
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: ${{ env.RUST_VERSION }}
 
-      # 5. Get packages
-      - run: flutter pub get
+      - name: Check rust-toolchain.toml
+        run: rustup show
 
-      # 6. Build for amd64 (native)
-      - name: Build for amd64
-        if: matrix.arch == 'amd64'
+      - name: Dependencies
+        run: flutter pub get
+
+      - name: Compile linux
+        run: flutter build linux
+
+      - name: Create tar.gz archive
         run: |
-          flutter build linux --release
-          mkdir -p dist/amd64
-          cp -r build/linux/x64/release/bundle/* dist/amd64/
+          cd build/linux/x64/release/bundle
+          tar -czvf ../../../../../result.tar.gz *
 
-      # 7. Cross-compile for arm64
-      - name: Cross-compile for arm64
-        if: matrix.arch == 'arm64'
-        run: |
-          flutter build bundle
-          mkdir -p build/linux/arm64/release/bundle
-
-          # Run cmake manually with toolchain
-          cd linux
-          cmake -B build-arm64 \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_SYSTEM_NAME=Linux \
-            -DCMAKE_SYSTEM_PROCESSOR=aarch64 \
-            -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc \
-            -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ \
-            -DFLUTTER_TARGET_PLATFORM=linux-arm64 \
-            -GNinja
-
-          cmake --build build-arm64
-
-          # Copy binaries + flutter_assets to bundle
-          mkdir -p dist/arm64
-          cp -r ../build/flutter_assets dist/arm64/
-          cp build-arm64/${{ env.APP_NAME }} dist/arm64/
-
-      # 8. Package output
-      - name: Package ${{ matrix.arch }}
-        run: |
-          cd dist/${{ matrix.arch }}
-          tar -czvf ../../${{ env.APP_NAME }}-${{ matrix.arch }}.tar.gz .
-
-      # 9. Upload artifact
-      - name: Upload
+      - name: Upload tar.gz archive
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.APP_NAME }}-${{ matrix.arch }}
-          path: ${{ env.APP_NAME }}-${{ matrix.arch }}.tar.gz
+          name: tar-gz-x86-64-result
+          path: ./*.tar.gz
+
+  build_tar_arm_64:
+    needs: build
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build ARM64 with Docker
+        run: |
+          docker buildx build \
+            --platform linux/arm64 \
+            --build-arg FLUTTER_VERSION=${{ env.FLUTTER_VERSION }} \
+            --target export-stage \
+            --output type=local,dest=./docker-output \
+            -f Dockerfile .
+
+      - name: Extract build artifact
+        run: |
+          # Check what files are in docker-output
+          ls -la docker-output/
+          # The build.tar.gz should be in the docker-output directory
+          if [ -f docker-output/build.tar.gz ]; then
+            # Extract the contents of build.tar.gz and repackage as result.tar.gz
+            mkdir -p temp-extract
+            cd temp-extract
+            tar -xzf ../docker-output/build.tar.gz
+            tar -czvf ../result.tar.gz *
+            cd ..
+            rm -rf temp-extract
+          else
+            echo "build.tar.gz not found in docker-output"
+            echo "Contents of docker-output:"
+            find docker-output -type f
+            exit 1
+          fi
+
+      - name: Upload tar.gz archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: tar-gz-arm-64-result
+          path: ./result.tar.gz
+
+  build_appimage:
+    needs: build
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake libgtk-3-dev ninja-build libayatana-appindicator3-dev libnotify-dev wget file
+          # Install FUSE for AppImage support
+          sudo apt-get install -y fuse3 libfuse2
+          # Set up FUSE permissions
+          sudo modprobe fuse || echo "FUSE module not available, continuing with extraction method"
+          sudo chmod 666 /dev/fuse || echo "FUSE device not available, continuing with extraction method"
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: ${{ env.RUST_VERSION }}
+
+      - name: Dependencies
+        run: flutter pub get
+
+      - name: Build AppImage
+        run: |
+          chmod +x build_appimage.sh
+          ./build_appimage.sh
+
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: appimage-x86_64
+          path: ./*.AppImage
+
+  release:
+    needs:
+      - build
+      - build_tar_x86_64
+      - build_tar_arm_64
+      - build_appimage
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ needs.build.outputs.version }}
+          release_name: Flow Focus v${{ needs.build.outputs.version }}
+          body: |
+            ## Flow Focus v${{ needs.build.outputs.version }}
+
+            ### Downloads
+            - **AppImage (Recommended)**: Single executable file, works on most Linux distributions
+            - **Linux x86_64**: Download the tar.gz file below
+            - **Linux ARM64**: Download the ARM64 tar.gz file below
+
+            ### Installation
+
+            #### AppImage (Easiest)
+            1. Download the AppImage file
+            2. Make it executable: `chmod +x flow-focus-*.AppImage`
+            3. Run directly: `./flow-focus-*.AppImage`
+
+            #### Tar.gz Archive
+            1. Download the appropriate file for your architecture
+            2. Extract: `tar -xzf flow-focus-*.tar.gz`
+            3. Run the application
+
+            ### Changes
+            See the commit history for details on what's new in this release.
+          draft: false
+          prerelease: false
+
+      # Download and upload x86_64 build
+      - name: Download x86_64 tar.gz
+        uses: actions/download-artifact@v4
+        with:
+          name: tar-gz-x86-64-result
+          path: x86_64-result
+
+      - name: Upload x86_64 Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: x86_64-result/result.tar.gz
+          asset_name: flow-focus-${{ needs.build.outputs.version }}-linux-x86_64.tar.gz
+          asset_content_type: application/gzip
+
+      # Download and upload ARM64 build
+      - name: Download ARM64 tar.gz
+        uses: actions/download-artifact@v4
+        with:
+          name: tar-gz-arm-64-result
+          path: arm64-result
+
+      - name: Upload ARM64 Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: arm64-result/result.tar.gz
+          asset_name: flow-focus-${{ needs.build.outputs.version }}-linux-arm64.tar.gz
+          asset_content_type: application/gzip
+
+      # Download and upload AppImage
+      - name: Download AppImage
+        uses: actions/download-artifact@v4
+        with:
+          name: appimage-x86_64
+          path: appimage-result
+
+      - name: Upload AppImage Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: appimage-result/flow_focus-${{ needs.build.outputs.version }}-x86_64.AppImage
+          asset_name: flow-focus-${{ needs.build.outputs.version }}-x86_64.AppImage
+          asset_content_type: application/octet-stream
